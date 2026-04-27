@@ -33,6 +33,13 @@
         {% endfor %}
     </p>
     <p>
+        {{ form.password_again.label }}
+        {{ form.password_again(class="form-control") }}
+        {% for error in form.password.errors %}
+            <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
         {{ form.age.label }}
         {{ form.age(class="form-control") }}
         {% for error in form.age.errors %}

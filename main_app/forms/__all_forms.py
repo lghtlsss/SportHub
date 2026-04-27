@@ -1,2 +1,2 @@
-# from .login_form impot
+from .login_form import LoginForm
 from .registration_form import RegisterForm

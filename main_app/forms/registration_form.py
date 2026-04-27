@@ -9,7 +9,9 @@ class RegisterForm(FlaskForm):
     surname = StringField('Введите вашу фамилию', validators=[DataRequired()])
     age = IntegerField('Введите ваш возраст', validators=[DataRequired()])
     password = PasswordField('Придумайте пароль', validators=[DataRequired()])
+    password_again = PasswordField('Повторите пароль', validators=[DataRequired()])
     description = StringField('О себе(по желанию)')
     pref_sport = SelectMultipleField('Выберите ваш спорт', validators=[DataRequired()],
-                                     choices=[(1, 'Бег'), (2, 'Велоспорт'), (3, 'Тяжелая атлетика'), (4, 'Фитнес/Похудение')])
+                                     choices=[(1, 'Бег'), (2, 'Велоспорт'), (3, 'Тяжелая атлетика'),
+                                              (4, 'Фитнес/Похудение')])
     submit = SubmitField('Зарегистрироваться')
