@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+<h1>Профиль</h1>
+<p>{{ name }}</p>
+{% else %}
+<p>Вы не зарегистрированы</p>
+{% endif %}
+{% endblock %}

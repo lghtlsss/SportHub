@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Регистрация</h1>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.email.label }}
+        {{ form.email(class="form-control") }}
+        {% for error in form.email.errors %}
+            <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.name.label }}
+        {{ form.name(class="form-control") }}
+        {% for error in form.name.errors %}
+            <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.surname.label }}
+        {{ form.surname(class="form-control") }}
+        {% for error in form.surname.errors %}
+            <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.password.label }}
+        {{ form.password(class="form-control") }}
+        {% for error in form.password.errors %}
+            <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.age.label }}
+        {{ form.age(class="form-control") }}
+        {% for error in form.age.errors %}
+            <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.description.label }}
+        {{ form.description(class="form-control") }}
+        {% for error in form.description.errors %}
+            <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.pref_sport.label }}
+        {{ form.pref_sport(class="form-control") }}
+        {% for error in form.pref_sport.errors %}
+            <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.submit(type="submit", class="btn btn-primary") }}
+    </p>
+    <div>{{ message }}</div>
+
+</form>
+{% endblock %}
