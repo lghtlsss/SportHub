@@ -4,23 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{{ title }}</title>
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-          crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+            crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
 </head>
 <body>
-<header class="navbar navbar-expand-lg bd-navbar sticky-top"
-        style="background-color: cornsilk; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2)">
-    <nav class="container-xxl bd-gutter flex-wrap flex-lg-nowrap">
+<header>
+    <nav class="d-flex align-items-center p-2"
+         style="background-color: cornsilk; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2)">
+        <a class="navbar-brand" style="font-size: 300%">SportHub</a>
+        <a class="btn btn-active" href="/index" style="font-size: 150%; margin-left: 3vh; margin-top: 1vh"><b>Посты</b></a>
+        <a class="btn btn-active" href="/subscriptions" style="font-size: 150%; margin-top: 1vh"><b>Подписки</b></a>
+        <a class="btn btn-active" href="/profile" style="font-size: 150%; margin-top: 1vh"><b>Профиль</b></a>
 
-        <h3 style="margin-left: 5%; margin-right: 5%; ">SportsHub</h3>
-        <img src="" alt="Img">
-        <a class="btn btn-active" href="/index">Посты</a>
-        <a class="btn btn-active" href="/subscriptions">Подписки</a>
-        <a class="btn btn-active" href="/profile">Профиль</a>
-
+        <div class="ms-auto">
+            {% if not current_user.is_authenticated %}
+            <a class="btn btn-outline-primary" href="/register" style="font-size: 150%;margin-right:15px">Зарегистрироваться</a>
+            <a class="btn btn-outline-success" href="/login" style="font-size: 150%;margin-right:5vh">Войти</a>
+            {% else %}
+            <a class="btn btn-outline-danger" href="/logout" style="font-size: 150%">Выйти</a>
+            {% endif %}
+        </div>
     </nav>
 </header>
 <!-- Page content start  -->
