@@ -3,4 +3,7 @@
 {% block content %}
 <h1>Ваша лента</h1>
 <div>типа посты</div>
+{% for post in posts %}
+<p>{{post}}</p>
+{% endfor %}
 {% endblock %}

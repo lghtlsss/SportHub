@@ -29,8 +29,13 @@ def index():
     return render_template("index.html", title='Главная')
 
 
+# TODO: Сделать без подзагрузок с js + api
 @app.route("/posts_line")
 def posts_line():
+    session = db_session.create_session()
+    first_20 = session.query(Post).limit(20).all()
+    if first_20:
+        return render_template("posts_line.html", title='Лента', posts=[(item.author, item.text) for item in first_20])
     return render_template("posts_line.html", title='Лента')
 
 
@@ -93,7 +98,7 @@ def logout():
     return redirect('/')
 
 
-# TODO: Переделать через api + js
+# TODO: Переделать через api + js?
 @app.route('/create_post')
 def create_post():
     form = PostCreation()
@@ -112,7 +117,7 @@ def create_post():
 
 
 # TODO: Просмотр поста
-@app.route('/view_post/<int: post_id>')
+@app.route('/view_post/<int:post_id>')
 def view_post():
     pass
 
