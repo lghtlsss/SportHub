@@ -4,7 +4,6 @@ from wtforms import SubmitField, StringField
 
 
 class PostCreation(FlaskForm):
-    author = StringField('Автор', validators=[DataRequired()])
     text = StringField('Текст поста', validators=[DataRequired()])
     contents = StringField('Вложения **пока не работает**')
     topic = StringField('Тема(не обязательно)')

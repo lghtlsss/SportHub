@@ -5,13 +5,6 @@
 <form action="" method="post">
     {{ form.hidden_tag() }}
     <p>
-        {{ form.author.label }}
-        {{ form.author(class="form-control") }}
-        {% for error in form.author.errors %}
-            <span style="color:red">{{ error }}</span>
-        {% endfor %}
-    </p>
-    <p>
         {{ form.text.label }}
         {{ form.text(class="form-control") }}
         {% for error in form.text.errors %}

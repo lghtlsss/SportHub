@@ -35,7 +35,7 @@ def posts_line():
     session = db_session.create_session()
     first_20 = session.query(Post).limit(20).all()
     if first_20:
-        return render_template("posts_line.html", title='Лента', posts=[(item.author, item.text) for item in first_20])
+        return render_template("posts_line.html", title='Лента', posts=[(item.author_id, item.text) for item in first_20])
     return render_template("posts_line.html", title='Лента')
 
 
@@ -99,21 +99,22 @@ def logout():
 
 
 # TODO: Переделать через api + js?
-@app.route('/create_post')
+@app.route('/create_post', methods=['POST', 'GET'])
+@login_required
 def create_post():
     form = PostCreation()
     if form.validate_on_submit():
         session = db_session.create_session()
         new_post = Post(
-            author=form.author.data,
+            author_id=current_user.id,
             text=form.text.data,
             contents=form.contents.data,
             topic=form.topic.data
         )
         session.add(new_post)
         session.commit()
-        return redirect('/posts')
-    return render_template('post_creation.html')
+        return redirect('/posts_line')
+    return render_template('post_creation.html', title='Публикация поста', form=form)
 
 
 # TODO: Просмотр поста
@@ -123,7 +124,7 @@ def view_post():
 
 
 def main():
-    db_session.global_init('../db/base_2.db')
+    db_session.global_init('../db/base_3.db')
     app.run(port=8080, host='127.0.0.1', debug=True)
 
 

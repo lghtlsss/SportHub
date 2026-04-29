@@ -28,7 +28,7 @@ class PostResource(Resource):
 
 
 parser = reqparse.RequestParser()
-parser.add_argument('author', required=True)
+parser.add_argument('author_id', required=True)
 parser.add_argument('text', required=True)
 parser.add_argument('contents',
                     required=True)  # вот тут мб что-то с типами сделать, тк в контенте должна быть картинка, но скорее всего буду хранить в последовательности байт
@@ -47,7 +47,7 @@ class PostListResource(Resource):
         args = parser.parse_args()
         session = db_session.create_session()
         new_post = Post(
-            author=args['author'],
+            author=args['author_id'],
             text=args['text'],
             contents=args['contents'],
             topic=args['topic']
