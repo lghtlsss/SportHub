@@ -34,9 +34,7 @@ def index():
 def posts_line():
     session = db_session.create_session()
     first_20 = session.query(Post).limit(20).all()
-    if first_20:
-        return render_template("posts_line.html", title='Лента', posts=[(item.author_id, item.text) for item in first_20])
-    return render_template("posts_line.html", title='Лента')
+    return render_template("posts_line.html", title='Лента', posts=first_20)
 
 
 @app.route('/profile')
@@ -105,8 +103,9 @@ def create_post():
     form = PostCreation()
     if form.validate_on_submit():
         session = db_session.create_session()
-        new_post = Post(
-            author_id=current_user.id,
+        author = session.query(User).get(current_user.id)
+        new_post = Post(title=form.title,
+            author=f'{author.name} {author.surname}',
             text=form.text.data,
             contents=form.contents.data,
             topic=form.topic.data
@@ -124,7 +123,7 @@ def view_post():
 
 
 def main():
-    db_session.global_init('../db/base_3.db')
+    db_session.global_init('../db/base_5.db')
     app.run(port=8080, host='127.0.0.1', debug=True)
 
 
