@@ -29,18 +29,24 @@ def index():
     return render_template("index.html", title='Главная')
 
 
+@app.route("/posts_line")
+def posts_line():
+    return render_template("posts_line.html", title='Лента')
+
+
 @app.route('/profile')
 def profile():
     if current_user.is_authenticated:
         session = db_session.create_session()
         user = session.query(User).get(current_user.id)
-        return render_template("profile.html", name=user.name, surname=user.surname, age=user.age, sport=user.pref_sport, title='Профиль')
+        return render_template("profile.html", name=user.name, surname=user.surname, age=user.age,
+                               sport=user.pref_sport, title='Профиль')
     return render_template("profile.html", title='Профиль')
 
 
 @app.route('/subscriptions')
 def subscriptions():
-    return ''
+    return render_template('subscriptions.html', title='Подписки')
 
 
 @app.route('/register', methods=['POST', 'GET'])
