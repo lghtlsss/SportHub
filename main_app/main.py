@@ -29,17 +29,12 @@ def index():
     return render_template("index.html", title='Главная')
 
 
-@app.before_request
-def debug():
-    print("REQUEST:", request.method, request.path)
-
-
 @app.route('/profile')
 def profile():
     if current_user.is_authenticated:
         session = db_session.create_session()
         user = session.query(User).get(current_user.id)
-        return render_template("profile.html", name=user.name, title='Профиль')
+        return render_template("profile.html", name=user.name, surname=user.surname, age=user.age, sport=user.pref_sport, title='Профиль')
     return render_template("profile.html", title='Профиль')
 
 
@@ -83,11 +78,6 @@ def login():
             return redirect('/profile')
         return render_template('login.html', title='Аторизация', message='Неверный пароль', form=form)
     return render_template('login.html', form=form, title='Авторизация')
-
-
-@app.route('/profile/delete', methods=['POST'])
-def delete_profile():
-    pass
 
 
 @app.route('/logout')
