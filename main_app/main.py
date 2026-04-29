@@ -2,13 +2,11 @@ import sqlalchemy
 from flask import Flask, render_template, request, redirect
 from flask_login import login_required, logout_user, current_user, LoginManager, login_user
 
+from app_dir.app_class import app
 from data.user import User
 from forms.__all_forms import *
 from data import db_session
 from data.__all_models import User
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = "super_secret_key"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -60,7 +58,7 @@ def register():
                 session.commit()
                 return redirect("/profile")
             return render_template("register.html", form=form, message='Пароли не совпадают')
-        return render_template("register.html", form=form,message='Адрес электронной почты занят')
+        return render_template("register.html", form=form, message='Адрес электронной почты занят')
     return render_template("register.html", form=form)
 
 
@@ -85,6 +83,7 @@ def logout():
 
 
 def main():
+    app.run()
     db_session.global_init('../db/base_2.db')
     app.run(port=8080, host='127.0.0.1', debug=True)
 
