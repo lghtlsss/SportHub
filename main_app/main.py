@@ -5,7 +5,7 @@ from flask_restful import Api
 from app_dir.app_class import app
 from forms.__all_forms import *
 from data import db_session
-from data.__all_models import User
+from data.__all_models import *
 from resources.post_resource import PostResource, PostListResource
 from resources.user_resourse import UserResource
 
@@ -91,6 +91,30 @@ def login():
 def logout():
     logout_user()
     return redirect('/')
+
+
+# TODO: Переделать через api + js
+@app.route('/create_post')
+def create_post():
+    form = PostCreation()
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        new_post = Post(
+            author=form.author.data,
+            text=form.text.data,
+            contents=form.contents.data,
+            topic=form.topic.data
+        )
+        session.add(new_post)
+        session.commit()
+        return redirect('/posts')
+    return render_template('post_creation.html')
+
+
+# TODO: Просмотр поста
+@app.route('/view_post/<int: post_id>')
+def view_post():
+    pass
 
 
 def main():

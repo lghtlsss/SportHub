@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Создание записи</h1>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.author.label }}
+        {{ form.author(class="form-control") }}
+        {% for error in form.author.errors %}
+            <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.text.label }}
+        {{ form.text(class="form-control") }}
+        {% for error in form.text.errors %}
+            <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.contents.label }}
+        {{ form.contents(class="form-control") }}
+        {% for error in form.contents.errors %}
+            <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.topic.label }}
+        {{ form.topic(class="form-control") }}
+        {% for error in form.topic.errors %}
+            <span style="color:red">{{ error }}</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.submit(type="submit", class="btn btn-primary") }}
+    </p>
+    <div>{{ message }}</div>
+</form>
+{% endblock %}
