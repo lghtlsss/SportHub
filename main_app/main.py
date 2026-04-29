@@ -1,9 +1,7 @@
-import sqlalchemy
-from flask import Flask, render_template, request, redirect
+from flask import render_template, redirect
 from flask_login import login_required, logout_user, current_user, LoginManager, login_user
 
 from app_dir.app_class import app
-from data.user import User
 from forms.__all_forms import *
 from data import db_session
 from data.__all_models import User
@@ -73,6 +71,11 @@ def login():
             return redirect('/profile')
         return render_template('login.html', title='Аторизация', message='Неверный пароль', form=form)
     return render_template('login.html', form=form, title='Авторизация')
+
+
+@app.route('/profile/delete', methods=['POST'])
+def delete_profile():
+    pass
 
 
 @app.route('/logout')
