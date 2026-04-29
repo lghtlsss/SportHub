@@ -1,13 +1,20 @@
-from flask import render_template, redirect
+from flask import render_template, redirect, request
 from flask_login import login_required, logout_user, current_user, LoginManager, login_user
+from flask_restful import Api
 
 from app_dir.app_class import app
 from forms.__all_forms import *
 from data import db_session
 from data.__all_models import User
+from resources.post_resource import PostResource, PostListResource
+from resources.user_resourse import UserResource
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+api = Api(app)
+api.add_resource(PostResource, '/api/post/<int:post_id>')
+api.add_resource(PostListResource, '/api/posts')
+api.add_resource(UserResource, '/api/users/<int:user_id>')
 
 
 @login_manager.user_loader
@@ -20,6 +27,11 @@ def load_user(user_id):
 @app.route("/index")
 def index():
     return render_template("index.html", title='Главная')
+
+
+@app.before_request
+def debug():
+    print("REQUEST:", request.method, request.path)
 
 
 @app.route('/profile')
@@ -86,7 +98,6 @@ def logout():
 
 
 def main():
-    app.run()
     db_session.global_init('../db/base_2.db')
     app.run(port=8080, host='127.0.0.1', debug=True)
 

@@ -4,6 +4,15 @@
 {% if current_user.is_authenticated %}
 <h1>Профиль</h1>
 <p>{{ name }}</p>
+<button onclick="deleteUser(1)">Удалить</button>
+
+<script>
+function deleteUser(id) {
+    fetch(`/api/users/${id}`, {
+        method: 'DELETE'
+    })
+}
+</script>
 {% else %}
 <p>Вы не зарегистрированы</p>
 {% endif %}

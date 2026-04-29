@@ -7,4 +7,4 @@ class MyApp(Flask):
         self.config['SECRET_KEY'] = "super_secret_key"
 
 
-app = MyApp(__name__, static_folder='../app_dir/static', template_folder='../app_dir/templates')
+app = MyApp(__name__, static_folder='../main_app/static', template_folder='../main_app/templates')
