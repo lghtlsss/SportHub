@@ -7,12 +7,12 @@
 <h4 style="text-align: left; margin-top:3%">Фамилия : {{ surname }}</h4>
 <h4 style="text-align: left; margin-top:3%">Возраст : {{ age }}</h4>
 {% if sport %}
-    <h4 style="text-align: left; margin-top:3%">Вид спорта: {{ sport }}</h4>
+<h4 style="text-align: left; margin-top:3%">Вид спорта: {{ sport }}</h4>
 {% else %}
-    <h4 style="text-align: left; margin-top:3%">Вид спорта: Не указан</h4>
+<h4 style="text-align: left; margin-top:3%">Вид спорта: Не указан</h4>
 {% endif %}
 <div>
-    <button onclick="deleteUser(1)" class="btn btn-danger">Удалить профиль</button>
+    <button onclick="deleteUser({{current_user.id}})" class="btn btn-danger">Удалить профиль</button>
     <a href="/profile/edit" class="btn btn-warning">Редактировать</a>
 </div>
 
