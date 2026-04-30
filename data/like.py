@@ -12,4 +12,4 @@ class Like(SqlAlchemyBase, SerializerMixin):
     user_id = Column(Integer, ForeignKey('Users.id'))
     post_id = Column(Integer, ForeignKey('Posts.id'))
     user = relationship('User', uselist=False, back_populates='likes')
-    post = relationship('Post', back_populates='likes')
+    post = relationship('Post', back_populates='likes', uselist=False)

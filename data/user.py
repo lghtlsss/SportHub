@@ -18,7 +18,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     hashed_password = sqlalchemy.Column(sqlalchemy.String)
     description = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     pref_sport = sqlalchemy.Column(sqlalchemy.String)
-    likes = relationship('Like', back_populates='users')
+    likes = relationship('Like', back_populates='user')
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)

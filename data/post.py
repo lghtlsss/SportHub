@@ -15,6 +15,5 @@ class Post(SqlAlchemyBase, SerializerMixin):
     contents = Column(String, nullable=True)
     topic = Column(String, nullable=True)
     creation_time = Column(DateTime, default=datetime.now)
-    # likes = Column(Integer, default=0)
     comments = relationship('Comment', cascade='all, delete-orphan', lazy='selectin', back_populates='post')
     likes = relationship('Like', cascade='all, delete-orphan', lazy='selectin', back_populates='post')
