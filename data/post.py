@@ -1,4 +1,5 @@
-import sqlalchemy
+from sqlalchemy import Column, String, Integer, DateTime
+from sqlalchemy.orm import relationship
 from datetime import datetime
 from sqlalchemy_serializer import SerializerMixin
 
@@ -6,11 +7,13 @@ from .db_session import SqlAlchemyBase
 
 
 class Post(SqlAlchemyBase, SerializerMixin):
-    __tablename__ = 'posts'
-    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
-    author = sqlalchemy.Column(sqlalchemy.String)
-    title = sqlalchemy.Column(sqlalchemy.String)
-    text = sqlalchemy.Column(sqlalchemy.String)
-    contents = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    topic = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    creation_time = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.now)
+    __tablename__ = 'Posts'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    author = Column(String)
+    title = Column(String)
+    text = Column(String)
+    contents = Column(String, nullable=True)
+    topic = Column(String, nullable=True)
+    creation_time = Column(DateTime, default=datetime.now)
+    likes = Column(Integer, default=0)
+    comments = relationship('Comment', cascade='all, delete-orphan', lazy='selectin', back_populates='post')
