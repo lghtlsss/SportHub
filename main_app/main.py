@@ -104,7 +104,7 @@ def create_post():
     if form.validate_on_submit():
         session = db_session.create_session()
         author = session.query(User).get(current_user.id)
-        new_post = Post(title=form.title,
+        new_post = Post(title=form.title.data,
             author=f'{author.name} {author.surname}',
             text=form.text.data,
             contents=form.contents.data,
@@ -123,7 +123,7 @@ def view_post():
 
 
 def main():
-    db_session.global_init('../db/base_7.db')
+    db_session.global_init('../db/base_8.db')
     app.run(port=8080, host='127.0.0.1', debug=True)
 
 
