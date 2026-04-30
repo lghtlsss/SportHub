@@ -13,10 +13,36 @@
             {{ post.text }}
         </div>
         <div class="post-footer">
-            <button>♡ Нравится</button>
-            <button>💬 Комментарии</button>
+            <button onclick="toggleLike({{post.id}}, {{current_user.id}}, this)">♡ 0</button>
+            <button onclick="viewComment()">💬 Комментарии</button>
         </div>
     </div>
 </div>
 {% endfor %}
+<script>
+    function toggleLike(post_id, user, btn) {
+        console.log("CLICK", post_id);
+        fetch(`/api/post/${post_id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                user: user,
+                likes: 1
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+
+
+                btn.innerText = `♡ ${data.likes}`;
+            });
+    }
+
+    function viewComment(post_id) {
+
+    }
+</script>
 {% endblock %}
