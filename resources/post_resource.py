@@ -40,7 +40,6 @@ class PostResource(Resource):
     def patch(self, post_id):
         session = db_session.create_session()
         abort_if_not_found(session, post_id)
-        post = session.get(Post, post_id)
         args = parser.parse_args()
         user = session.get(User, args['user'])
         like = session.query(Like).filter_by(
