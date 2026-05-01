@@ -2,5 +2,7 @@
 
 {% block content %}
 <h1 style="text-align: center">Ваши подписки</h1>
-<table></table>
+{% for item in subs %}
+{{ item }}
+{% endfor %}
 {% endblock %}

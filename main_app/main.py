@@ -50,7 +50,11 @@ def profile():
 
 @app.route('/subscriptions')
 def subscriptions():
-    return render_template('subscriptions.html', title='Подписки')
+    session = db_session.create_session()
+    user = session.get(User, current_user.id)
+    subs = session.query(Subscriber).filter(Subscriber.subscriber_user_id == user.id).all()
+    print(subs)
+    return render_template('subscriptions.html', title='Подписки', subs=subs)
 
 
 @app.route('/register', methods=['POST', 'GET'])
