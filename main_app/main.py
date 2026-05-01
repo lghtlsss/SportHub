@@ -7,7 +7,7 @@ from forms.__all_forms import *
 from data import db_session
 from data.__all_models import *
 from resources.post_resource import PostResource, PostListResource
-from resources.user_resourse import UserResource
+from resources.user_resourse import UserResource, ListUserResource
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -15,6 +15,7 @@ api = Api(app)
 api.add_resource(PostResource, '/api/post/<int:post_id>')
 api.add_resource(PostListResource, '/api/posts')
 api.add_resource(UserResource, '/api/users/<int:user_id>')
+api.add_resource(ListUserResource, '/api/users')
 
 
 @login_manager.user_loader
@@ -123,7 +124,7 @@ def view_post():
 
 
 def main():
-    db_session.global_init('../db/base_10.db')
+    db_session.global_init('../db/base_11.db')
     app.run(port=8080, host='127.0.0.1', debug=True)
 
 
