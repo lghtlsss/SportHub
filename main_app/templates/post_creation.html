@@ -34,7 +34,11 @@
         </div>
 
         <div class="form-group">
-            {{ form.topic(class="form-select") }}
+            {{ form.topic(class="form-input", placeholder=" ") }}
+            <label class="form-label">{{ form.topic.label.text }}</label>
+            {% for error in form.topic.errors %}
+                <div class="form-error">{{ error }}</div>
+            {% endfor %}
         </div>
 
         {{ form.submit(class="form-btn") }}
