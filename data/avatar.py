@@ -10,3 +10,4 @@ class Avatar(SqlAlchemyBase, SerializerMixin):
     content = Column(LargeBinary)
     mime = Column(String)
     user_id = Column(Integer, ForeignKey('Users.id'))
+    user = relationship('User', back_populates='avatar', uselist=False)

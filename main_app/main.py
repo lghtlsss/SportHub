@@ -4,7 +4,7 @@ from flask_restful import Api
 
 from app_dir.app_class import app
 from forms.__all_forms import *
-from data import db_session
+from data import db_session, avatar
 from data.__all_models import *
 from resources.post_resource import PostResource, PostListResource
 from resources.user_resourse import UserResource, ListUserResource
@@ -66,8 +66,20 @@ def register():
         session = db_session.create_session()
         if not session.query(User).filter(User.email == form.email.data).first():
             if form.password.data == form.password_again.data:
+                file = form.avatar.data
+                if file:
+                    avatar = Avatar(
+                        content=file.read(),
+                        mime=file.mimetype
+                    )
+                else:
+                    with open('static/images/no_avatar.jpg', 'rb') as no_avatar_f:
+                        avatar = Avatar(content=no_avatar_f, mimetype='image/jpg')
+                session.add(avatar)
+                session.flush()
                 new_user = User(
                     email=form.email.data,
+                    avatar=avatar,
                     name=form.name.data,
                     surname=form.surname.data,
                     age=form.age.data,
