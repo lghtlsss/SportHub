@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import PasswordField, StringField, IntegerField, EmailField, SelectMultipleField, SubmitField, FileField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, InputRequired
 from flask_wtf.file import FileAllowed
 
 
@@ -14,7 +14,8 @@ class RegisterForm(FlaskForm):
     password = PasswordField('Придумайте пароль', validators=[DataRequired()])
     password_again = PasswordField('Повторите пароль', validators=[DataRequired()])
     description = StringField('О себе(По желанию)')
-    pref_sport = SelectMultipleField('Выберите ваш спорт', validators=[DataRequired()],
-                                     choices=[(1, 'Бег'), (2, 'Велоспорт'), (3, 'Тяжелая атлетика'),
-                                              (4, 'Фитнес/Похудение')])
+    pref_sport = SelectMultipleField('Выберите ваш спорт', validators=[InputRequired()],
+                                     choices=[('Бег', 'Бег'), ('Велоспорт', 'Велоспорт'),
+                                              ('Тяжелая атлетика', 'Тяжелая атлетика'),
+                                              ('Фитнес/Похудение', 'Фитнес/Похудение')])
     submit = SubmitField('Зарегистрироваться')

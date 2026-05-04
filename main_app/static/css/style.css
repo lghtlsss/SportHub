@@ -399,11 +399,11 @@ footer {
     width: 120px;
     height: 120px;
     border-radius: 50%;
+    border: 3px solid #00ff85;
 
     background-size: cover;
     background-position: center;
-
-    border: 3px solid #00ff85;
+    background-repeat: no-repeat;
 }
 
 .profile-main-info h1 {
@@ -611,4 +611,49 @@ footer {
 
 .form-select:focus {
     border-color: #00ff85;
+}
+
+/* ===== CHECKBOX GROUP ===== */
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* скрываем стандартный checkbox */
+.checkbox-input {
+    display: none;
+}
+
+/* ===== CARD STYLE ===== */
+.checkbox-card {
+    padding: 10px 16px;
+    border-radius: 12px;
+
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+
+    color: white;
+    font-size: 14px;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* hover */
+.checkbox-card:hover {
+    border-color: rgba(255,255,255,0.3);
+}
+
+/* checked state */
+.checkbox-input:checked + .checkbox-card {
+    border-color: #00ff85;
+    background: rgba(0,255,133,0.1);
+    box-shadow: 0 0 10px rgba(0,255,133,0.25);
+}
+
+/* optional: галочка */
+.checkbox-input:checked + .checkbox-card::after {
+    content: " ✓";
+    color: #00ff85;
 }
