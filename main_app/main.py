@@ -177,6 +177,7 @@ def profile_edit(user_id):
     if current_user.id != user_id:
         abort(404)
 
+#TODO: сделать комментарии
 
 def main():
     db_session.global_init('../db/base_12.db')

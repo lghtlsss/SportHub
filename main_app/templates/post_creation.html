@@ -1,40 +1,50 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Создание записи</h1>
-<form action="" method="post">
-    {{ form.hidden_tag() }}
-    <p>
-        {{ form.title.label }}
-        {{ form.title(class="form-control") }}
-        {% for error in form.title.errors %}
-            <span style="color:red">{{ error }}</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.text.label }}
-        {{ form.text(class="form-control") }}
-        {% for error in form.text.errors %}
-            <span style="color:red">{{ error }}</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.contents.label }}
-        {{ form.contents(class="form-control") }}
-        {% for error in form.contents.errors %}
-            <span style="color:red">{{ error }}</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.topic.label }}
-        {{ form.topic(class="form-control") }}
-        {% for error in form.topic.errors %}
-            <span style="color:red">{{ error }}</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.submit(type="submit", class="btn btn-primary") }}
-    </p>
-    <div>{{ message }}</div>
-</form>
+
+<div class="form-container">
+
+    <h1>Создание записи</h1>
+
+    <form method="post">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.title(class="form-input", placeholder=" ") }}
+            <label class="form-label">{{ form.title.label.text }}</label>
+            {% for error in form.title.errors %}
+                <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.text(class="form-input", placeholder=" ") }}
+            <label class="form-label">{{ form.text.label.text }}</label>
+            {% for error in form.text.errors %}
+                <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.contents(class="form-input", placeholder=" ") }}
+            <label class="form-label">{{ form.contents.label.text }}</label>
+            {% for error in form.contents.errors %}
+                <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.topic(class="form-select") }}
+        </div>
+
+        {{ form.submit(class="form-btn") }}
+
+        <div class="form-error" style="margin-top: 10px;">
+            {{ message }}
+        </div>
+
+    </form>
+
+</div>
+
 {% endblock %}

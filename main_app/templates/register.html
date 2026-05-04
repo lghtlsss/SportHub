@@ -1,76 +1,86 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Регистрация</h1>
-<form action="" method="post" enctype="multipart/form-data">
-    {{ form.hidden_tag() }}
-    <p>
-        {{ form.email.label }}
-        {{ form.email(class="form-control") }}
-        {% for error in form.email.errors %}
-            <span style="color:red">{{ error }}</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.name.label }}
-        {{ form.name(class="form-control") }}
-        {% for error in form.name.errors %}
-            <span style="color:red">{{ error }}</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.surname.label }}
-        {{ form.surname(class="form-control") }}
-        {% for error in form.surname.errors %}
-            <span style="color:red">{{ error }}</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.password.label }}
-        {{ form.password(class="form-control") }}
-        {% for error in form.password.errors %}
-            <span style="color:red">{{ error }}</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.password_again.label }}
-        {{ form.password_again(class="form-control") }}
-        {% for error in form.password.errors %}
-            <span style="color:red">{{ error }}</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.age.label }}
-        {{ form.age(class="form-control") }}
-        {% for error in form.age.errors %}
-            <span style="color:red">{{ error }}</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.description.label }}
-        {{ form.description(class="form-control") }}
-        {% for error in form.description.errors %}
-            <span style="color:red">{{ error }}</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.pref_sport.label }}
-        {{ form.pref_sport(class="form-control") }}
-        {% for error in form.pref_sport.errors %}
-            <span style="color:red">{{ error }}</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.avatar.label }}
-        {{ form.avatar(class="form-control", accept="image/png, image/jpeg") }}
-        {% for error in form.avatar.errors %}
-            <span style="color:red">{{ error }}</span>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.submit(type="submit", class="btn btn-primary") }}
-    </p>
-    <div>{{ message }}</div>
 
-</form>
+<div class="form-container">
+
+    <h1>Регистрация</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.email(class="form-input", placeholder=" ") }}
+            <label class="form-label">{{ form.email.label.text }}</label>
+            {% for error in form.email.errors %}
+                <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.name(class="form-input", placeholder=" ") }}
+            <label class="form-label">{{ form.name.label.text }}</label>
+            {% for error in form.name.errors %}
+                <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.surname(class="form-input", placeholder=" ") }}
+            <label class="form-label">{{ form.surname.label.text }}</label>
+            {% for error in form.surname.errors %}
+                <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.password(class="form-input", placeholder=" ") }}
+            <label class="form-label">{{ form.password.label.text }}</label>
+            {% for error in form.password.errors %}
+                <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.password_again(class="form-input", placeholder=" ") }}
+            <label class="form-label">{{ form.password_again.label.text }}</label>
+            {% for error in form.password_again.errors %}
+                <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.age(class="form-input", placeholder=" ") }}
+            <label class="form-label">{{ form.age.label.text }}</label>
+            {% for error in form.age.errors %}
+                <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.description(class="form-input", placeholder=" ") }}
+            <label class="form-label">{{ form.description.label.text }}</label>
+            {% for error in form.description.errors %}
+                <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.pref_sport(class="form-select") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.avatar(class="form-input") }}
+        </div>
+
+        {{ form.submit(class="form-btn") }}
+
+        <div class="form-error" style="margin-top: 10px;">
+            {{ message }}
+        </div>
+
+    </form>
+
+</div>
+
 {% endblock %}
