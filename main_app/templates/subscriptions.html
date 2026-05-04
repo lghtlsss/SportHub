@@ -1,8 +1,33 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+    .my-table {
+        table-layout: fixed;
+    }
+
+    .col-1 {
+        width: 84%;
+    }
+
+    .col-2 {
+        width: 16%;
+    }
+</style>
 <h1 style="text-align: center">Ваши подписки</h1>
-{% for item in subs %}
-{{ item }}
-{% endfor %}
+<table class="table my-table" style="width: 70%; margin: auto;">
+    {% for item in subs %}
+    <tr>
+        <td class="col-1">
+            <div style="text-align: center; word-wrap: break-word; display: flex; gap: 1%">
+                <p style="font-size: 180%">{{item[0]}}</p>
+                <p style="font-size: 180%">{{item[1]}}</p>
+            </div>
+        </td>
+        <td class="col-2">
+            <button class="btn btn-secondary" style="font-size: 120%">Отписаться</button>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
 {% endblock %}

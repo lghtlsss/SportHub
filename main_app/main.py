@@ -53,8 +53,8 @@ def subscriptions():
     session = db_session.create_session()
     user = session.get(User, current_user.id)
     subs = session.query(Subscriber).filter(Subscriber.subscriber_user_id == user.id).all()
-    print(subs)
-    return render_template('subscriptions.html', title='Подписки', subs=subs)
+    return render_template('subscriptions.html', title='Подписки',
+                           subs=[[item.user.name, item.user.surname] for item in subs])
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -110,11 +110,11 @@ def create_post():
         session = db_session.create_session()
         author = session.query(User).get(current_user.id)
         new_post = Post(title=form.title.data,
-            author=f'{author.name} {author.surname}',
-            text=form.text.data,
-            contents=form.contents.data,
-            topic=form.topic.data
-        )
+                        author=f'{author.name} {author.surname}',
+                        text=form.text.data,
+                        contents=form.contents.data,
+                        topic=form.topic.data
+                        )
         session.add(new_post)
         session.commit()
         return redirect('/posts_line')
