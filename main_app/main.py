@@ -37,6 +37,7 @@ def index():
 
 # TODO: Сделать без подзагрузок с js + api
 @app.route("/posts_line")
+@login_required
 def posts_line():
     session = db_session.create_session()
     first_20 = session.query(Post).limit(20).all()
@@ -45,13 +46,12 @@ def posts_line():
 
 # TODO: пофиксить отображение вида спорта
 @app.route('/profile')
+@login_required
 def profile():
-    if current_user.is_authenticated:
-        session = db_session.create_session()
-        user = session.get(User, current_user.id)
-        return render_template("profile.html", name=user.name, surname=user.surname, age=user.age,
-                               sport=user.pref_sport, about=user.description, title='Профиль')
-    return render_template("profile.html", title='Профиль')
+    session = db_session.create_session()
+    user = session.get(User, current_user.id)
+    return render_template("profile.html", name=user.name, surname=user.surname, age=user.age,
+                           sport=user.pref_sport, about=user.description, title='Профиль')
 
 
 @app.route('/profile/delete/<int:user_id>')
@@ -66,19 +66,20 @@ def delete_profile(user_id):
         return redirect('/register')
     return abort(404)
 
+
 @app.route('/about_us')
 def about_us():
     return render_template('about_us.html', title='О нас')
 
+
 @app.route('/subscriptions')
+@login_required
 def subscriptions():
     session = db_session.create_session()
-    if current_user.is_authenticated:
-        user = session.get(User, current_user.id)
-        subs = session.query(Subscriber).filter(Subscriber.subscriber_user_id == user.id).all()
-        return render_template('subscriptions.html', title='Подписки',
-                               subs=[[item.user.name, item.user.surname] for item in subs])
-    return render_template('no_logined_user.html', title='Подписки', page_title='Подписки')
+    user = session.get(User, current_user.id)
+    subs = session.query(Subscriber).filter(Subscriber.subscriber_user_id == user.id).all()
+    return render_template('subscriptions.html', title='Подписки',
+                           subs=[[item.user.name, item.user.surname] for item in subs])
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -146,9 +147,8 @@ def logout():
 
 
 @app.route('/create_post', methods=['POST', 'GET'])
+@login_required
 def create_post():
-    if not current_user.is_authenticated:
-        return render_template('no_logined_user.html', title='Создание поста', page_title='Создание поста')
     form = PostCreation()
     if form.validate_on_submit():
         session = db_session.create_session()
