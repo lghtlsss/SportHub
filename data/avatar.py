@@ -8,4 +8,5 @@ class Avatar(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'Avatars'
     id = Column(Integer, primary_key=True, autoincrement=True)
     content = Column(LargeBinary)
+    mime = Column(String)
     user_id = Column(Integer, ForeignKey('Users.id'))
