@@ -128,7 +128,7 @@ def view_post():
 
 
 def main():
-    db_session.global_init('../db/base_11.db')
+    db_session.global_init('../db/base_12.db')
     app.run(port=8080, host='127.0.0.1', debug=True)
 
 

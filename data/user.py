@@ -1,5 +1,6 @@
 import sqlalchemy
 from flask_login import UserMixin
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy_serializer import SerializerMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -18,6 +19,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     hashed_password = sqlalchemy.Column(sqlalchemy.String)
     description = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     pref_sport = sqlalchemy.Column(sqlalchemy.String)
+    avatar_id = sqlalchemy.Column(sqlalchemy.LargeBinary, ForeignKey('Avatars.id'))
     likes = relationship('Like', back_populates='user', cascade="all, delete-orphan")
     subscribers = relationship('Subscriber', back_populates='user', cascade="all, delete-orphan")
 
