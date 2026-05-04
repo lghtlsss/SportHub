@@ -120,7 +120,7 @@ def register():
                 new_user.set_password(form.password.data)
                 session.add(new_user)
                 session.commit()
-                return redirect("/profile")
+                return redirect("/login")
             return render_template("register.html", form=form, message='Пароли не совпадают')
         return render_template("register.html", form=form, message='Адрес электронной почты занят')
     return render_template("register.html", form=form)
@@ -169,6 +169,13 @@ def create_post():
 @app.route('/view_post/<int:post_id>')
 def view_post():
     pass
+
+
+# TODO: редактирование профиля
+@app.route('/profile/edit/<int:id>')
+def profile_edit(user_id):
+    if current_user.id != user_id:
+        abort(404)
 
 
 def main():
