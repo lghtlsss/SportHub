@@ -51,10 +51,12 @@ def profile():
 @app.route('/subscriptions')
 def subscriptions():
     session = db_session.create_session()
-    user = session.get(User, current_user.id)
-    subs = session.query(Subscriber).filter(Subscriber.subscriber_user_id == user.id).all()
-    return render_template('subscriptions.html', title='Подписки',
-                           subs=[[item.user.name, item.user.surname] for item in subs])
+    if current_user.is_authenticated:
+        user = session.get(User, current_user.id)
+        subs = session.query(Subscriber).filter(Subscriber.subscriber_user_id == user.id).all()
+        return render_template('subscriptions.html', title='Подписки',
+                               subs=[[item.user.name, item.user.surname] for item in subs])
+    return render_template('no_logined_user.html', title='Подписки', page_title='Подписки')
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -101,10 +103,10 @@ def logout():
     return redirect('/')
 
 
-# TODO: Переделать через api + js?
 @app.route('/create_post', methods=['POST', 'GET'])
-@login_required
 def create_post():
+    if not current_user.is_authenticated:
+        return render_template('no_logined_user.html', title='Создание поста', page_title='Создание поста')
     form = PostCreation()
     if form.validate_on_submit():
         session = db_session.create_session()
