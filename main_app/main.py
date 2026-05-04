@@ -50,7 +50,7 @@ def profile():
         session = db_session.create_session()
         user = session.get(User, current_user.id)
         return render_template("profile.html", name=user.name, surname=user.surname, age=user.age,
-                               sport=user.pref_sport, title='Профиль')
+                               sport=user.pref_sport, about=user.description, title='Профиль')
     return render_template("profile.html", title='Профиль')
 
 
@@ -99,8 +99,8 @@ def register():
                 else:
                     with open('static/images/no_avatar.jpg', 'rb') as no_avatar_f:
                         avatar = Avatar(
-                            content=no_avatar_f,
-                            mimetype='image/jpg'
+                            content=no_avatar_f.read(),
+                            mime='image/jpg'
                         )
                 session.add(avatar)
                 session.flush()

@@ -44,6 +44,13 @@
     </tr>
     <tr>
         <td style="background-color: rgb(210 105 30 / 0.84)">
+            <div style="display: flex; gap: 5%; text-align: left; margin-top:3%">
+                <h4>О себе:</h4><p style="font-size: 150%">{{ about }}</p>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="background-color: rgb(210 105 30 / 0.84)">
             <div style="display: flex; gap: 5%">
                 <a href="/profile/delete/{{current_user.id}}" class="btn btn-danger">Удалить профиль</a>
                 <a href="/profile/edit/{{current_user.id}}" class="btn btn-warning">Редактировать профиль</a>
