@@ -657,3 +657,115 @@ footer {
     content: " ✓";
     color: #00ff85;
 }
+
+.post {
+    max-width: 650px;
+    margin: 20px auto;
+
+    padding: 18px 20px;
+    border-radius: 18px;
+
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    transition: 0.2s;
+}
+
+/* hover эффект как в современных соцсетях */
+.post:hover {
+    border-color: rgba(0,255,133,0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+}
+
+/* ===== HEADER ===== */
+.post-header {
+    font-size: 12px;
+    opacity: 0.6;
+    margin-bottom: 8px;
+}
+
+/* ===== TITLE ===== */
+.post-title {
+    font-size: 20px;
+    margin: 8px 0 12px 0;
+    color: white;
+}
+
+/* ===== BODY ===== */
+.post-body {
+    font-size: 14px;
+    line-height: 1.6;
+    opacity: 0.85;
+
+    margin-bottom: 15px;
+}
+
+/* ===== FOOTER ===== */
+.post-footer {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+/* ===== BUTTONS ===== */
+.post-footer button {
+    padding: 8px 12px;
+    border-radius: 10px;
+
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+
+    color: white;
+    font-size: 13px;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* like button (акцентный) */
+.post-footer button:first-child {
+    border-color: rgba(0,255,133,0.3);
+}
+
+.post-footer button:first-child:hover {
+    background: rgba(0,255,133,0.1);
+    box-shadow: 0 0 12px rgba(0,255,133,0.2);
+}
+
+/* comment button */
+.post-footer button:last-child:hover {
+    border-color: rgba(255,255,255,0.25);
+}
+
+.post-link-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 8px 12px;
+    border-radius: 10px;
+
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+
+    color: white;
+    font-size: 13px;
+    text-decoration: none;
+
+    transition: 0.2s;
+}
+
+.post-link-btn:hover {
+    border-color: rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 0 12px rgba(0,255,133,0.15);
+    transform: translateY(-1px);
+}
+
+/* ===== AUTHOR INFO ===== */
+.post-info {
+    color: rgba(255,255,255,0.5);
+}

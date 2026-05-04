@@ -44,7 +44,6 @@ def posts_line():
     return render_template("posts_line.html", title='Лента', posts=first_20)
 
 
-# TODO: пофиксить отображение вида спорта
 @app.route('/profile')
 @login_required
 def profile():
@@ -167,8 +166,14 @@ def create_post():
 
 # TODO: Просмотр поста
 @app.route('/view_post/<int:post_id>')
-def view_post():
-    pass
+def view_post(post_id):
+    session = db_session.create_session()
+    post = session.get(Post, post_id)
+    if post:
+        return render_template('view_post.html', title='Просмотр поста', post=post)
+    return redirect("/posts_line")
+
+
 
 
 # TODO: редактирование профиля
@@ -177,7 +182,8 @@ def profile_edit(user_id):
     if current_user.id != user_id:
         abort(404)
 
-#TODO: сделать комментарии
+
+# TODO: сделать комментарии
 
 def main():
     db_session.global_init('../db/base_12.db')

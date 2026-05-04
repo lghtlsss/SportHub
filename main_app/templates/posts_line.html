@@ -1,24 +1,55 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 style="color: rgb(251 137 91 / 0.9)">Ваша лента</h1>
-{% for post in posts %}
-<div class="post">
-    <div class="post-content">
-        <div class="post-header">
-            <span class="post-info">• Posted by {{ post.author }} N hours ago</span>
+
+<h1 class="feed-title">Ваша лента</h1>
+
+<div class="feed">
+
+    {% for post in posts %}
+
+    <div class="post">
+
+        <div class="post-content">
+
+            <div class="post-header">
+            <span class="post-info">
+                • Posted by {{ post.author }} · N hours ago
+            </span>
+            </div>
+
+            <h2 class="post-title">
+                {{ post.title }}
+            </h2>
+
+            <div class="post-body">
+                {{ post.text }}
+            </div>
+
+            <div class="post-footer">
+
+                <button onclick="toggleLike({{post.id}}, {{current_user.id}}, this)">
+                    ♡ {{ post.likes if post.likes else 0 }}
+                </button>
+
+                <button onclick="viewComment({{ post.id }})">
+                    💬 Комментарии
+                </button>
+
+                <a class="post-link-btn" href="/view_post/{{ post.id }}">
+                    Открыть пост
+                </a>
+
+            </div>
+
         </div>
-        <h2 class="post-title">{{ post.title }}</h2>
-        <div class="post-body">
-            {{ post.text }}
-        </div>
-        <div class="post-footer">
-            <button onclick="toggleLike({{post.id}}, {{current_user.id}}, this)">♡ 0</button>
-            <button onclick="viewComment()">💬 Комментарии</button>
-        </div>
+
     </div>
+
+    {% endfor %}
+
 </div>
-{% endfor %}
+
 <script>
     function toggleLike(post_id, user, btn) {
         console.log("CLICK", post_id);
@@ -35,14 +66,13 @@
             .then(res => res.json())
             .then(data => {
                 console.log(data);
-
-
                 btn.innerText = `♡ ${data.likes}`;
             });
     }
 
     function viewComment(post_id) {
-
+        // пока пусто
     }
 </script>
+
 {% endblock %}
