@@ -1,64 +1,69 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 {% if current_user.is_authenticated %}
-<h1 style="margin-top: 2%; text-align: center">Ваш профиль</h1>
-<table class="table" style="border: rgb(210 105 30 / 0.84)">
-    <tr>
-        <td style="background-color: rgb(210 105 30 / 0.84)">
-            <div style="display: flex; gap: 5%">
-                <h4>Аватар:</h4> <img src="/api/avatar/{{ current_user.id }}" alt="Аватар" width="256px" height="256px">
+
+<section class="profile-page">
+
+    <div class="profile-card">
+
+        <!-- АВАТАР + ИМЯ -->
+        <div class="profile-header">
+            <div class="profile-avatar"
+                 style="background-image: url('/api/avatar/{{ current_user.id }}')">
             </div>
-        </td>
-    </tr>
-    <tr>
-        <td style="background-color: rgb(210 105 30 / 0.84)">
-            <div style="display: flex; gap: 5%; text-align: left; margin-top:3%">
-                <h4>Имя:</h4> <h4>{{ name }}</h4>
+
+            <div class="profile-main-info">
+                <h1>{{ name }} {{ surname }}</h1>
+                <p class="profile-age">{{ age }} лет</p>
             </div>
-    </tr>
-    <tr>
-        <td style="background-color: rgb(210 105 30 / 0.84)">
-            <div style="display: flex; gap: 5%; text-align: left; margin-top:3%">
-                <h4 style="text-align: left; margin-top:3%">Фамилия : {{ surname }}</h4>
+        </div>
+
+        <!-- ОСНОВНАЯ ИНФА -->
+        <div class="profile-info-grid">
+
+            <div class="info-block">
+                <span>Вид спорта</span>
+                <strong>
+                    {% if sport %}
+                        {{ sport }}
+                    {% else %}
+                        Не указан
+                    {% endif %}
+                </strong>
             </div>
-        </td>
-    </tr>
-    <tr>
-        <td style="background-color: rgb(210 105 30 / 0.84)">
-            <div style="display: flex; gap: 5%; text-align: left; margin-top:3%">
-                <h4 style="text-align: left; margin-top:3%">Возраст : {{ age }}</h4>
+
+            <div class="info-block">
+                <span>О себе</span>
+                <p>
+                    {% if about %}
+                        {{ about }}
+                    {% else %}
+                        Нет описания
+                    {% endif %}
+                </p>
             </div>
-        </td>
-    </tr>
-    <tr>
-        <td style="background-color: rgb(210 105 30 / 0.84)">
-            <div style="display: flex; gap: 5%; text-align: left; margin-top:3%">
-                {% if sport %}
-                <h4 style="text-align: left; margin-top:3%">Вид спорта: {{ sport }}</h4>
-                {% else %}
-                <h4 style="text-align: left; margin-top:3%">Вид спорта: Не указан</h4>
-                {% endif %}
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td style="background-color: rgb(210 105 30 / 0.84)">
-            <div style="display: flex; gap: 5%; text-align: left; margin-top:3%">
-                <h4>О себе:</h4><p style="font-size: 150%">{{ about }}</p>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td style="background-color: rgb(210 105 30 / 0.84)">
-            <div style="display: flex; gap: 5%">
-                <a href="/profile/delete/{{current_user.id}}" class="btn btn-danger">Удалить профиль</a>
-                <a href="/profile/edit/{{current_user.id}}" class="btn btn-warning">Редактировать профиль</a>
-            </div>
-        </td>
-    </tr>
-</table>
+
+        </div>
+
+        <!-- КНОПКИ -->
+        <div class="profile-actions">
+            <a href="/profile/edit/{{ current_user.id }}" class="btn edit-btn">
+                Редактировать
+            </a>
+
+            <a href="/profile/delete/{{ current_user.id }}" class="btn delete-btn">
+                Удалить профиль
+            </a>
+        </div>
+
+    </div>
+
+</section>
+
 {% else %}
-<h2 style="margin-top: 2%; text-align: center">Вы не зарегистрированы</h2>
+<h2 class="not-auth">Вы не зарегистрированы</h2>
 {% endif %}
+
 {% endblock %}

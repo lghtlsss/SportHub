@@ -13,30 +13,29 @@
 </head>
 <body>
 <header>
-    <nav class="d-flex align-items-center p-2"
-         style="background-color: cornsilk; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2)">
-        <a class="navbar-brand" style="font-size: 300%" href="/index">SportHub</a>
-        <a class="btn btn-active" href="/posts_line"
-           style="font-size: 150%; margin-left: 3vh; margin-top: 1vh"><b>Посты</b></a>
-        <a class="link-underline link-underline-opacity-0" href="/create_post" style="font-size: 150%; margin-top: 1vh; color: rgb(255 165 0 / 0.76)"><b>Создать пост</b></a>
-        <a class="btn btn-active" href="/subscriptions" style="font-size: 150%; margin-top: 1vh"><b>Подписки</b></a>
-        <a class="btn btn-active" href="/profile" style="font-size: 150%; margin-top: 1vh"><b>Профиль</b></a>
-
-        <div class="ms-auto">
+    <div class="nav">
+        <div class="logo"><a style="color: #00ff85" href="/index">SportHub</a></div>
+        <div>
             {% if not current_user.is_authenticated %}
-            <a class="btn btn-outline-primary" href="/register" style="font-size: 150%;margin-right:15px">Зарегистрироваться</a>
-            <a class="btn btn-outline-success" href="/login" style="font-size: 150%;margin-right:5vh">Войти</a>
+            <a href="/register">Регистрация</a>
+            <a href="/login">Войти</a>
             {% else %}
-            <a class="btn btn-outline-danger" href="/logout" style="font-size: 150%">Выйти</a>
+            <a href="/posts_line">Лента</a>
+            <a href="/subscriptions">Подписки</a>
+            <a href="/profile">Профиль</a>
+            <a href="/logout">Выйти</a>
             {% endif %}
         </div>
-    </nav>
+    </div>
 </header>
+
 <!-- Page content start  -->
 <main role="main" class="container">
     {% block content %}{% endblock %}
 </main>
 </body>
 </html>
-
+<footer>
+    © 2026 SportHub — Social Fitness Platform
+</footer>
 <!--display: inline-block-->

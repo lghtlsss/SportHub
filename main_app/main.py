@@ -66,6 +66,9 @@ def delete_profile(user_id):
         return redirect('/register')
     return abort(404)
 
+@app.route('/about_us')
+def about_us():
+    return render_template('about_us.html', title='О нас')
 
 @app.route('/subscriptions')
 def subscriptions():
