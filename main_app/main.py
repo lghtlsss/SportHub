@@ -8,6 +8,10 @@ from data import db_session, avatar
 from data.__all_models import *
 from resources.post_resource import PostResource, PostListResource
 from resources.user_resourse import UserResource, ListUserResource
+from resources.avatar_resource import AvatarResource
+
+from PIL import Image
+import io
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -16,6 +20,7 @@ api.add_resource(PostResource, '/api/post/<int:post_id>')
 api.add_resource(PostListResource, '/api/posts')
 api.add_resource(UserResource, '/api/users/<int:user_id>')
 api.add_resource(ListUserResource, '/api/users')
+api.add_resource(AvatarResource, '/api/avatar/<int:avatar_id>')
 
 
 @login_manager.user_loader
@@ -38,6 +43,7 @@ def posts_line():
     return render_template("posts_line.html", title='Лента', posts=first_20)
 
 
+# TODO: пофиксить отображение вида спорта
 @app.route('/profile')
 def profile():
     if current_user.is_authenticated:
@@ -81,13 +87,21 @@ def register():
             if form.password.data == form.password_again.data:
                 file = form.avatar.data
                 if file:
+                    img = Image.open(file)
+                    img.thumbnail((256, 256))
+                    img = img.convert("RGB")
+                    buffer = io.BytesIO()
+                    img.save(buffer, format="JPEG", quality=85)
                     avatar = Avatar(
-                        content=file.read(),
-                        mime=file.mimetype
+                        content=buffer.getvalue(),
+                        mime="image/jpeg"
                     )
                 else:
                     with open('static/images/no_avatar.jpg', 'rb') as no_avatar_f:
-                        avatar = Avatar(content=no_avatar_f, mimetype='image/jpg')
+                        avatar = Avatar(
+                            content=no_avatar_f,
+                            mimetype='image/jpg'
+                        )
                 session.add(avatar)
                 session.flush()
                 new_user = User(

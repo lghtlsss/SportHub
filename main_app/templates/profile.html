@@ -3,18 +3,54 @@
 {% block content %}
 {% if current_user.is_authenticated %}
 <h1 style="margin-top: 2%; text-align: center">Ваш профиль</h1>
-<h4 style="text-align: left; margin-top:3%">Имя : {{ name }}</h4>
-<h4 style="text-align: left; margin-top:3%">Фамилия : {{ surname }}</h4>
-<h4 style="text-align: left; margin-top:3%">Возраст : {{ age }}</h4>
-{% if sport %}
-<h4 style="text-align: left; margin-top:3%">Вид спорта: {{ sport }}</h4>
-{% else %}
-<h4 style="text-align: left; margin-top:3%">Вид спорта: Не указан</h4>
-{% endif %}
-<div>
-    <a href="/profile/delete/{{current_user.id}}" class="btn btn-danger">Удалить профиль</a>
-    <a href="/profile/edit/{{current_user.id}}" class="btn btn-warning">Редактировать профиль</a>
-</div>
+<table class="table" style="border: rgb(210 105 30 / 0.84)">
+    <tr>
+        <td style="background-color: rgb(210 105 30 / 0.84)">
+            <div style="display: flex; gap: 5%">
+                <h4>Аватар:</h4> <img src="/api/avatar/{{ current_user.id }}" alt="Аватар" width="256px" height="256px">
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="background-color: rgb(210 105 30 / 0.84)">
+            <div style="display: flex; gap: 5%; text-align: left; margin-top:3%">
+                <h4>Имя:</h4> <h4>{{ name }}</h4>
+            </div>
+    </tr>
+    <tr>
+        <td style="background-color: rgb(210 105 30 / 0.84)">
+            <div style="display: flex; gap: 5%; text-align: left; margin-top:3%">
+                <h4 style="text-align: left; margin-top:3%">Фамилия : {{ surname }}</h4>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="background-color: rgb(210 105 30 / 0.84)">
+            <div style="display: flex; gap: 5%; text-align: left; margin-top:3%">
+                <h4 style="text-align: left; margin-top:3%">Возраст : {{ age }}</h4>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="background-color: rgb(210 105 30 / 0.84)">
+            <div style="display: flex; gap: 5%; text-align: left; margin-top:3%">
+                {% if sport %}
+                <h4 style="text-align: left; margin-top:3%">Вид спорта: {{ sport }}</h4>
+                {% else %}
+                <h4 style="text-align: left; margin-top:3%">Вид спорта: Не указан</h4>
+                {% endif %}
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="background-color: rgb(210 105 30 / 0.84)">
+            <div style="display: flex; gap: 5%">
+                <a href="/profile/delete/{{current_user.id}}" class="btn btn-danger">Удалить профиль</a>
+                <a href="/profile/edit/{{current_user.id}}" class="btn btn-warning">Редактировать профиль</a>
+            </div>
+        </td>
+    </tr>
+</table>
 {% else %}
 <h2 style="margin-top: 2%; text-align: center">Вы не зарегистрированы</h2>
 {% endif %}
