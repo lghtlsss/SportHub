@@ -1,6 +1,6 @@
 from flask import render_template, redirect, request
 from flask_login import login_required, logout_user, current_user, LoginManager, login_user
-from flask_restful import Api
+from flask_restful import Api, abort
 
 from app_dir.app_class import app
 from forms.__all_forms import *
@@ -42,10 +42,23 @@ def posts_line():
 def profile():
     if current_user.is_authenticated:
         session = db_session.create_session()
-        user = session.query(User).get(current_user.id)
+        user = session.get(User, current_user.id)
         return render_template("profile.html", name=user.name, surname=user.surname, age=user.age,
                                sport=user.pref_sport, title='Профиль')
     return render_template("profile.html", title='Профиль')
+
+
+@app.route('/profile/delete/<int:user_id>')
+@login_required
+def delete_profile(user_id):
+    session = db_session.create_session()
+    user = session.get(User, user_id)
+    if user:
+        logout_user()
+        session.delete(user)
+        session.commit()
+        return redirect('/register')
+    return abort(404)
 
 
 @app.route('/subscriptions')
