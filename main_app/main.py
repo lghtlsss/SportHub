@@ -170,12 +170,20 @@ def create_post():
     return render_template('post_creation.html', title='Публикация поста', form=form)
 
 
-# TODO: раскрыть комментарии
-@app.route('/view_post/<int:post_id>')
+@app.route('/view_post/<int:post_id>', methods=['POST', 'GET'])
 def view_post(post_id):
     session = db_session.create_session()
     post = session.get(Post, post_id)
     if post:
+        if request.method == 'POST':
+            comment_text = request.form.get('comment')
+            new_comment = Comment(
+                post_id=post_id,
+                author_id=current_user.id,
+                content=comment_text
+            )
+            session.add(new_comment)
+            session.commit()
         str_delta = time_tool.get_delta(post.creation_time)
         return render_template('view_post.html', title='Просмотр поста', post=post, delta=str_delta)
     return redirect("/posts_line")

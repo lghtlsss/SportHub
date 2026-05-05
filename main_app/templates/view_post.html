@@ -28,7 +28,6 @@
                     onclick="toggleLike({{ post.id }}, {{ current_user.id }}, this)">
                 ♡ 0
             </button>
-
         </div>
 
 
@@ -38,7 +37,24 @@
                 Комментарии ({{ post.comments|length }})
             </div>
 
+
             <div class="comments-section">
+                <div class="comment-bar">
+
+                    <form method="post" class="comment-form">
+
+                    <textarea name="comment"
+                              class="comment-input"
+                              placeholder="Написать комментарий..."
+                              rows="1"></textarea>
+
+                        <button type="submit" class="comment-submit">
+                            Отправить
+                        </button>
+
+                    </form>
+
+                </div>
                 {% for comment in post.comments %}
                 <div class="comment">
                     <div class="comment-header">
@@ -57,7 +73,6 @@
 </div>
 <script>
     function toggleLike(post_id, user, btn) {
-        console.log("CLICK", post_id);
         fetch(`/api/post/${post_id}`, {
             method: 'PATCH',
             headers: {
@@ -74,5 +89,16 @@
                 btn.innerText = `♡ ${data.likes}`;
             });
     }
+
+    const textarea = document.querySelector(".comment-input");
+
+    function autoResize(el) {
+        el.style.height = "auto";           // сброс
+        el.style.height = el.scrollHeight + "px"; // установка по контенту
+    }
+
+    textarea.addEventListener("input", function () {
+        autoResize(this);
+    });
 </script>
 {% endblock %}
