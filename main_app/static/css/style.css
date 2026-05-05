@@ -41,8 +41,6 @@ body {
     margin-top: 10px;
     display: flex;
     gap: 10px;
-    justify-content: space-between; /* Лайк слева, комменты справа */
-    align-items: center;
 }
 
 .post-footer button {
