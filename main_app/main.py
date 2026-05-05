@@ -13,6 +13,7 @@ from resources.comment_resource import CommentListResource, CommentResource
 
 from PIL import Image
 import io
+from tools import time_tool
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -44,7 +45,9 @@ def index():
 def posts_line():
     session = db_session.create_session()
     first_20 = session.query(Post).limit(20).all()
-    return render_template("posts_line.html", title='Лента', posts=first_20)
+    deltas = [time_tool.get_delta(item.creation_time) for item in first_20]
+    posts = zip(first_20, deltas)
+    return render_template("posts_line.html", title='Лента', posts=list(posts))
 
 
 @app.route('/profile')
@@ -173,7 +176,8 @@ def view_post(post_id):
     session = db_session.create_session()
     post = session.get(Post, post_id)
     if post:
-        return render_template('view_post.html', title='Просмотр поста', post=post)
+        str_delta = time_tool.get_delta(post.creation_time)
+        return render_template('view_post.html', title='Просмотр поста', post=post, delta=str_delta)
     return redirect("/posts_line")
 
 
