@@ -12,8 +12,10 @@ parser.add_argument('subscription_user', required=True, location='json')
 class UserResource(Resource):
     def get(self, user_id):
         session = db_session.create_session()
+        self.abort_if_user_not_found(session, user_id)
         user = session.get(User, user_id)
-        return jsonify({"user": user.to_dict()})
+        return jsonify(
+            {"user": user.to_dict(only=['id', 'email', 'name', 'surname', 'age', 'description', 'pref_sport'])})
 
     def delete(self, user_id):
         session = db_session.create_session()
@@ -52,4 +54,4 @@ class ListUserResource(Resource):
     def get(self):
         session = db_session.create_session()
         users = session.query(User).all()
-        return jsonify({"users": [item.to_dict() for item in users]})
+        return jsonify({"users": [item.to_dict(only=['id', 'email', 'name', 'surname', 'age', 'description', 'pref_sport']) for item in users]})
