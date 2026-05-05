@@ -15,6 +15,7 @@ def abort_if_not_found(session, thing_id, thing_class):
 parser = reqparse.RequestParser()
 parser.add_argument('user_id', location='json', required=True)
 parser.add_argument('post_id', location='json', required=True)
+parser.add_argument('content', location='json')
 
 
 class CommentResource(Resource):
@@ -27,12 +28,21 @@ class CommentResource(Resource):
         return jsonify({'comments': [item.to_dict(only=['id', 'post_id', 'author_id', 'content', 'creation_time']) for
                                      item in comments]})
 
-    def to_dict(self, item):
-        return {
-            'post_id': item.post_id,
-            'user_id': item.user_id,
-            'text': item.content
-        }
+    def post(self):
+        session = create_session()
+        args = parser.parse_args()
+        post_id, user_id = args['post_id'], args['user_id']
+        text = args['content']
+        if not text:
+            return abort(404, message='Empty content')
+        comment = Comment(
+            post_id=post_id,
+            author_id=user_id,
+            content=text
+        )
+        session.add(comment)
+        session.commit()
+        return jsonify({'message': 'success', 'comm_id': comment.id})
 
 
 list_parser = reqparse.RequestParser()
@@ -46,4 +56,5 @@ class CommentListResource(Resource):
         comments = session.query(Comment).all()
         if not comments:
             return abort(404, message='Not found')
-        return jsonify({'comments': [item.to_dict(only=['id', 'post_id', 'author_id', 'content', 'creation_time']) for item in comments]})
+        return jsonify({'comments': [item.to_dict(only=['id', 'post_id', 'author_id', 'content', 'creation_time']) for
+                                     item in comments]})
