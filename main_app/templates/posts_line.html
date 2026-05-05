@@ -23,15 +23,9 @@
             </div>
 
             <div class="post-footer">
-
                 <button onclick="toggleLike({{post.id}}, {{current_user.id}}, this)">
                     ♡ {{ post.likes if post.likes else 0 }}
                 </button>
-
-                <button onclick="viewComment({{ post.id }})">
-                    💬 Комментарии
-                </button>
-
                 <a class="post-link-btn" href="/view_post/{{ post.id }}">
                     Открыть пост
                 </a>
@@ -64,10 +58,6 @@
                 console.log(data);
                 btn.innerText = `♡ ${data.likes}`;
             });
-    }
-
-    function viewComment(post_id) {
-        // пока пусто
     }
 </script>
 
