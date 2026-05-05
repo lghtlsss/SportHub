@@ -9,6 +9,7 @@ from data.__all_models import *
 from resources.post_resource import PostResource, PostListResource
 from resources.user_resourse import UserResource, ListUserResource
 from resources.avatar_resource import AvatarResource
+from resources.comment_resource import CommentListResource, CommentResource
 
 from PIL import Image
 import io
@@ -21,6 +22,8 @@ api.add_resource(PostListResource, '/api/posts')
 api.add_resource(UserResource, '/api/users/<int:user_id>')
 api.add_resource(ListUserResource, '/api/users')
 api.add_resource(AvatarResource, '/api/avatar/<int:avatar_id>')
+api.add_resource(CommentResource, '/api/user_comments')
+api.add_resource(CommentListResource, '/api/post_comments')
 
 
 @login_manager.user_loader
@@ -164,7 +167,7 @@ def create_post():
     return render_template('post_creation.html', title='Публикация поста', form=form)
 
 
-# TODO: Просмотр поста
+# TODO: раскрыть комментарии
 @app.route('/view_post/<int:post_id>')
 def view_post(post_id):
     session = db_session.create_session()
@@ -172,8 +175,6 @@ def view_post(post_id):
     if post:
         return render_template('view_post.html', title='Просмотр поста', post=post)
     return redirect("/posts_line")
-
-
 
 
 # TODO: редактирование профиля
