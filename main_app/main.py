@@ -46,8 +46,9 @@ def posts_line():
     session = db_session.create_session()
     first_20 = session.query(Post).limit(20).all()
     deltas = [time_tool.get_delta(item.creation_time) for item in first_20]
-    posts = zip(first_20, deltas)
-    return render_template("posts_line.html", title='Лента', posts=list(posts))
+    likes_counts = [len(elem.likes) for elem in first_20]
+    posts = list(zip(first_20, deltas, likes_counts))
+    return render_template("posts_line.html", title='Лента', posts=posts)
 
 
 @app.route('/profile')
@@ -185,7 +186,9 @@ def view_post(post_id):
             session.add(new_comment)
             session.commit()
         str_delta = time_tool.get_delta(post.creation_time)
-        return render_template('view_post.html', title='Просмотр поста', post=post, delta=str_delta)
+        likes_count = len(post.likes)
+        return render_template('view_post.html', title='Просмотр поста', post=post, delta=str_delta,
+                               likes_count=likes_count)
     return redirect("/posts_line")
 
 

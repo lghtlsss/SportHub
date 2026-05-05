@@ -5,7 +5,7 @@
 <h1 class="feed-title">Ваша лента</h1>
 
 <div class="feed">
-    {% for post, delta in posts %}
+    {% for post, delta, likes in posts %}
     <div class="post">
         <div class="post-content">
             <div class="post-header">
@@ -24,7 +24,7 @@
 
             <div class="post-footer">
                 <button onclick="toggleLike({{post.id}}, {{current_user.id}}, this)">
-                    ♡ {{ post.likes if post.likes else 0 }}
+                    ♡ {{ likes }}
                 </button>
                 <a class="post-link-btn" href="/view_post/{{ post.id }}">
                     Открыть пост
