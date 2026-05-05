@@ -2,18 +2,76 @@
 
 {% block content %}
 <div class="post">
+
     <div class="post-content">
+
+
         <div class="post-header">
-            <span class="post-info">• Posted by {{ post.author }} N hours ago</span>
+            <span class="post-info">
+                {{ post.author }} N hours ago
+            </span>
         </div>
-        <h2 class="post-title">{{ post.title }}</h2>
+
+
+        <h2 class="post-title">
+            {{ post.title }}
+        </h2>
+
+
         <div class="post-body">
             {{ post.text }}
         </div>
+
+
         <div class="post-footer">
-            <button onclick="toggleLike({{post.id}}, {{current_user.id}}, this)">♡ 0</button>
-            <button onclick="viewComment()">💬 Комментарии</button>
+            <button class="like-btn"
+                    onclick="toggleLike({{ post.id }}, {{ current_user.id }}, this)">
+                ♡ 0
+            </button>
+            <div class="comments-title">
+                Комментарии ({{ post.comments|length }})
+            </div>
+        </div>
+
+
+        <div class="comments-wrapper">
+
+
+            <div class="comments-section">
+                {% for comment in post.comments %}
+                <div class="comment">
+                    <div class="comment-header">
+                            <span class="comment-author">
+                                {{ comment.user.name }} {{ comment.user.surname }}
+                            </span>
+                    </div>
+                    <div class="comment-text">
+                        {{ comment.content }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>
+<script>
+    function toggleLike(post_id, user, btn) {
+        console.log("CLICK", post_id);
+        fetch(`/api/post/${post_id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                user: user,
+                likes: 1
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                btn.innerText = `♡ ${data.likes}`;
+            });
+    }
+</script>
 {% endblock %}

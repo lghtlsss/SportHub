@@ -10,7 +10,8 @@ class Comment(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'Comments'
     id = Column(Integer, autoincrement=True, primary_key=True)
     post_id = Column(Integer, ForeignKey("Posts.id"))
-    author_id = Column(Integer)
+    author_id = Column(Integer, ForeignKey("Users.id"))
     content = Column(String)
     creation_time = Column(DateTime, default=datetime.now)
     post = relationship('Post', back_populates='comments')
+    user = relationship('User', back_populates='comments')
