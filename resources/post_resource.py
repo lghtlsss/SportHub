@@ -1,4 +1,3 @@
-import flask_login
 from flask import jsonify
 from flask_restful import Resource, abort, reqparse
 
@@ -24,9 +23,8 @@ class PostResource(Resource):
         session = db_session.create_session()
         try:
             post = session.get(Post, post_id)
-            return jsonify({'post': self.to_dict(post)})
+            return jsonify({'post': post})
         except Exception as e:
-            print(e)
             return {'error': str(e)}, 500
 
     def delete(self, post_id):
@@ -77,7 +75,7 @@ class PostListResource(Resource):
         posts = session.query(Post).all()
         if not posts:
             abort(404, message='Not found')
-        return jsonify({'posts': [item.to_dict() for item in posts]})
+        return jsonify({'posts': [item.to_dict(only=['id', 'author', 'title', 'text', 'topic']) for item in posts]})
 
     def post(self):
         args = list_parser.parse_args()
