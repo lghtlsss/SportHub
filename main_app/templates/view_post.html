@@ -17,6 +17,10 @@
             {{ post.title }}
         </h2>
 
+        <div class="image-wrapper">
+            <img src="/api/images/{{post.id}}" alt="Изображение">
+        </div>
+
 
         <div class="post-body">
             {{ post.text }}
@@ -24,10 +28,11 @@
 
 
         <div class="post-footer">
-            <button class="like-btn"
+            <button class="post-footer-btn"
                     onclick="toggleLike({{ post.id }}, {{ current_user.id }}, this)">
                 ♡ {{ likes_count }}
             </button>
+            <button><a href="/posts_line" style="text-decoration: none;color: inherit">Назад</a></button>
         </div>
 
 
