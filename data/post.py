@@ -17,3 +17,4 @@ class Post(SqlAlchemyBase, SerializerMixin):
     creation_time = Column(DateTime, default=datetime.now)
     comments = relationship('Comment', cascade='all, delete-orphan', lazy='selectin', back_populates='post')
     likes = relationship('Like', cascade='all, delete-orphan', lazy='selectin', back_populates='post')
+    image = relationship('Image', back_populates='post', cascade='all, delete-orphan', lazy='joined')

@@ -40,6 +40,8 @@ def index():
 
 
 # TODO: Сделать без подзагрузок с js + api
+# TODO: Добавить отображение картинок так же как и автатарок(то есть сделать новый класс и ресурс для апишки и подтягивать картинки к постам.)
+#  Но сначала сделать без подзагрузок!
 @app.route("/posts_line")
 @login_required
 def posts_line():
@@ -199,10 +201,8 @@ def profile_edit(user_id):
         abort(404)
 
 
-# TODO: сделать комментарии
-
 def main():
-    db_session.global_init('../db/base_12.db')
+    db_session.global_init('../db/base_13.db')
     app.run(port=8080, host='127.0.0.1', debug=True)
 
 
