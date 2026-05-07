@@ -8,7 +8,7 @@ from data.db_session import create_session
 def abort_if_not_found(session, thing_id):
     thing = session.get(Avatar, thing_id)
     if not thing:
-        abort(404, message='Post not found')
+        abort(404, message='Not found')
 
 
 class AvatarResource(Resource):
