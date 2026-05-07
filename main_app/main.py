@@ -4,14 +4,15 @@ from flask_restful import Api, abort
 
 from app_dir.app_class import app
 from forms.__all_forms import *
-from data import db_session, avatar
+from data import db_session, avatar, image
 from data.__all_models import *
 from resources.post_resource import PostResource, PostListResource
 from resources.user_resourse import UserResource, ListUserResource
 from resources.avatar_resource import AvatarResource
 from resources.comment_resource import CommentListResource, CommentResource
+from resources.image_resource import ImageResource
 
-from PIL import Image
+from PIL import Image as Im
 import io
 from tools import time_tool
 
@@ -25,6 +26,7 @@ api.add_resource(ListUserResource, '/api/users')
 api.add_resource(AvatarResource, '/api/avatar/<int:avatar_id>')
 api.add_resource(CommentResource, '/api/user_comments')
 api.add_resource(CommentListResource, '/api/post_comments')
+api.add_resource(ImageResource, '/api/images/<int:post_id>')
 
 
 @login_manager.user_loader
@@ -99,11 +101,11 @@ def register():
             if form.password.data == form.password_again.data:
                 file = form.avatar.data
                 if file:
-                    img = Image.open(file)
-                    img.thumbnail((256, 256))
+                    img = Im.open(file)
+                    # img.thumbnail((1024, 1024))
                     img = img.convert("RGB")
                     buffer = io.BytesIO()
-                    img.save(buffer, format="JPEG", quality=85)
+                    img.save(buffer, format="JPEG", quality=95)
                     avatar = Avatar(
                         content=buffer.getvalue(),
                         mime="image/jpeg"
@@ -161,12 +163,31 @@ def create_post():
     if form.validate_on_submit():
         session = db_session.create_session()
         author = session.query(User).get(current_user.id)
-        new_post = Post(title=form.title.data,
-                        author=f'{author.name} {author.surname}',
-                        text=form.text.data,
-                        contents=form.contents.data,
-                        topic=form.topic.data
-                        )
+        file = form.contents.data
+        if file:
+            img = Im.open(file)
+            img.thumbnail((256, 256))
+            img = img.convert("RGB")
+            buffer = io.BytesIO()
+            img.save(buffer, format="JPEG", quality=85)
+            image = Image(
+                content=buffer.getvalue(),
+                mime="image/jpeg"
+            )
+            session.add(image)
+            session.flush()
+            new_post = Post(title=form.title.data,
+                            author=f'{author.name} {author.surname}',
+                            text=form.text.data,
+                            topic=form.topic.data,
+                            image=image
+                            )
+        else:
+            new_post = Post(title=form.title.data,
+                            author=f'{author.name} {author.surname}',
+                            text=form.text.data,
+                            topic=form.topic.data,
+                            )
         session.add(new_post)
         session.commit()
         return redirect('/posts_line')

@@ -6,14 +6,14 @@
 
     <h1>Создание записи</h1>
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
 
         <div class="form-group">
             {{ form.title(class="form-input", placeholder=" ") }}
             <label class="form-label">{{ form.title.label.text }}</label>
             {% for error in form.title.errors %}
-                <div class="form-error">{{ error }}</div>
+            <div class="form-error">{{ error }}</div>
             {% endfor %}
         </div>
 
@@ -21,7 +21,7 @@
             {{ form.text(class="form-input", placeholder=" ") }}
             <label class="form-label">{{ form.text.label.text }}</label>
             {% for error in form.text.errors %}
-                <div class="form-error">{{ error }}</div>
+            <div class="form-error">{{ error }}</div>
             {% endfor %}
         </div>
 
@@ -29,7 +29,7 @@
             {{ form.contents(class="form-input", placeholder=" ") }}
             <label class="form-label">{{ form.contents.label.text }}</label>
             {% for error in form.contents.errors %}
-                <div class="form-error">{{ error }}</div>
+            <div class="form-error">{{ error }}</div>
             {% endfor %}
         </div>
 
@@ -37,7 +37,7 @@
             {{ form.topic(class="form-input", placeholder=" ") }}
             <label class="form-label">{{ form.topic.label.text }}</label>
             {% for error in form.topic.errors %}
-                <div class="form-error">{{ error }}</div>
+            <div class="form-error">{{ error }}</div>
             {% endfor %}
         </div>
 
