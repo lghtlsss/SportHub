@@ -24,7 +24,7 @@ class PostResource(Resource):
         try:
             post = session.get(Post, post_id)
             likes_count = len(post.likes)
-            return jsonify({'post': post.to_dict(only=['author', 'title', 'text', 'contents', 'topic']), 'likes': likes_count})
+            return jsonify({'post': post.to_dict(only=['author', 'title', 'text', 'topic']), 'likes': likes_count})
         except Exception as e:
             return {'error': str(e)}, 500
 
