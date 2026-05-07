@@ -12,9 +12,11 @@ class Post(SqlAlchemyBase, SerializerMixin):
     author = Column(String)
     title = Column(String)
     text = Column(String)
-    contents = Column(String, nullable=True)
     topic = Column(String, nullable=True)
     creation_time = Column(DateTime, default=datetime.now)
     comments = relationship('Comment', cascade='all, delete-orphan', lazy='selectin', back_populates='post')
     likes = relationship('Like', cascade='all, delete-orphan', lazy='selectin', back_populates='post')
-    image = relationship('Image', back_populates='post', cascade='all, delete-orphan', lazy='joined')
+    image = relationship('Image', back_populates='post', cascade='all, delete-orphan',uselist=False)
+
+    def __repr__(self):
+        return f'{self.id};{self.author};{self.title};{self.text};{self.image.id}'
