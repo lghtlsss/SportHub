@@ -10,4 +10,4 @@ class Image(SqlAlchemyBase, SerializerMixin):
     id = Column(Integer, primary_key=True, autoincrement=True)
     post_id = Column(Integer, ForeignKey('Posts.id'))
     content = Column(LargeBinary)
-    post = relationship('Posts', back_populates='image')
+    post = relationship('Post', back_populates='image')
