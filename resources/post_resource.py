@@ -38,21 +38,24 @@ class PostResource(Resource):
 
     def patch(self, post_id):
         session = db_session.create_session()
-        abort_if_not_found(session, post_id)
-        args = parser.parse_args()
-        user = session.get(User, args['user'])
-        like = session.query(Like).filter_by(
-            user_id=user.id,
-            post_id=post_id
-        ).first()
-        if like:
-            session.delete(like)
-        else:
-            session.add(Like(user_id=user.id, post_id=post_id))
-        session.commit()
-        likes_count = session.query(Like).filter_by(post_id=post_id).count()
-
-        return {'likes': likes_count}
+        try:
+            abort_if_not_found(session, post_id)
+            args = parser.parse_args()
+            user = session.get(User, args['user'])
+            like = session.query(Like).filter_by(
+                user_id=user.id,
+                post_id=post_id
+            ).first()
+            if like:
+                session.delete(like)
+            else:
+                session.add(Like(user_id=user.id, post_id=post_id))
+            session.commit()
+            likes_count = session.query(Like).filter_by(post_id=post_id).count()
+    
+            return {'likes': likes_count}
+        finally:
+            session.close()
 
     def to_dict(self, post):
         return {

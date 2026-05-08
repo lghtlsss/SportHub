@@ -6,7 +6,7 @@
 
 <div>
     {% for post, delta, likes in posts %}
-    <div class="post">
+    <div class="post" data-id="{{ post.id }}">
         <div class="post-content">
             <div class="post-header">
             <span class="post-info">
@@ -63,6 +63,136 @@
                 btn.innerText = `♡ ${data.likes}`;
             });
     }
+
+    let loading = false;
+    let finished = false;
+    let last_id = null;
+
+    // контейнер, куда добавляем посты
+    const feedContainer = document.querySelector(".feed-container");
+
+    // если у тебя нет класса — оборачиваем существующий блок
+    if (!feedContainer) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "feed-container";
+
+        // переносим все посты внутрь контейнера
+        const posts = document.querySelectorAll(".post");
+        posts.forEach(p => wrapper.appendChild(p));
+
+        document.body.appendChild(wrapper);
+    }
+
+    async function loadMorePosts() {
+
+    if (loading || finished) return;
+
+    loading = true;
+
+    let url = "/api/feed";
+
+    if (last_id !== null) {
+        url += `?last_id=${last_id}`;
+    }
+
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (!data.posts || data.posts.length === 0) {
+        finished = true;
+        loading = false;
+        return;
+    }
+
+    const container = document.querySelector(".feed-container");
+
+    for (const post of data.posts) {
+
+        const div = document.createElement("div");
+
+        div.className = "post";
+        div.setAttribute("data-id", post.id);
+
+        div.innerHTML = `
+            <div class="post-content">
+
+                <div class="post-header">
+                    <span class="post-info">
+                        ${post.author} ${post.delta}
+                    </span>
+                </div>
+
+                <h2 class="post-title">
+                    ${post.title}
+                </h2>
+
+                <div class="image-wrapper">
+                    <img src="/api/images/${post.id}" alt="Изображение">
+                </div>
+
+                <div class="post-body" style="white-space: pre-wrap; word-break: break-word;">
+                    ${post.text}
+                </div>
+
+                <div class="post-footer">
+
+                    <button onclick="toggleLike(${post.id}, {{ current_user.id }}, this)">
+                        ♡ ${post.likes}
+                    </button>
+
+                    <a class="post-link-btn" href="/view_post/${post.id}">
+                        Открыть пост
+                    </a>
+
+                </div>
+
+            </div>
+        `;
+
+        container.appendChild(div);
+    }
+
+    // КЛЮЧЕВОЙ МОМЕНТ
+    last_id = data.last_id;
+
+    if (last_id === null) {
+        finished = true;
+    }
+
+    loading = false;
+}
+    /* scroll detector */
+    window.addEventListener("scroll", () => {
+
+        if (loading || finished) return;
+
+        const scrollTop = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const docHeight = document.documentElement.scrollHeight;
+
+        const nearBottom = scrollTop + windowHeight >= docHeight - 200;
+
+        if (nearBottom) {
+            loadMorePosts();
+        }
+    });
+
+    /*
+        первая инициализация (важно!)
+        берем last_id из последнего уже отрендеренного поста
+    */
+    window.addEventListener("load", () => {
+        const posts = document.querySelectorAll(".post");
+
+        if (posts.length > 0) {
+            // предполагаем, что backend сортирует DESC
+            // поэтому последний DOM элемент = самый старый
+            const lastPost = posts[posts.length - 1];
+
+            // можно прокинуть data-id в HTML (лучше), но упрощённо:
+            last_id = lastPost.getAttribute("data-id");
+        }
+    });
 </script>
 
 {% endblock %}

@@ -48,7 +48,7 @@ def index():
 @login_required
 def posts_line():
     session = db_session.create_session()
-    first_20 = session.query(Post).limit(20).all()
+    first_20 = session.query(Post).order_by(Post.id.desc()).limit(5).all()
     posts = [[item, time_tool.get_delta(item.creation_time), len(item.likes)] for item in first_20]
     return render_template("posts_line.html", title='Лента', posts=posts)
 
@@ -226,7 +226,7 @@ def success():
 
 
 def main():
-    db_session.global_init('../db/base_13.db')
+    db_session.global_init('../db/base_14.db')
     app.run(port=8080, host='127.0.0.1', debug=True)
 
 
