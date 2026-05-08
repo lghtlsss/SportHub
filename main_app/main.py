@@ -11,6 +11,7 @@ from resources.user_resourse import UserResource, ListUserResource
 from resources.avatar_resource import AvatarResource
 from resources.comment_resource import CommentListResource, CommentResource
 from resources.image_resource import ImageResource
+from resources.feed_resource import FeedResource
 
 from PIL import Image as Im
 import io
@@ -27,6 +28,7 @@ api.add_resource(AvatarResource, '/api/avatar/<int:user_id>')
 api.add_resource(CommentResource, '/api/user_comments')
 api.add_resource(CommentListResource, '/api/post_comments')
 api.add_resource(ImageResource, '/api/images/<int:post_id>')
+api.add_resource(FeedResource, '/api/feed')
 
 
 @login_manager.user_loader
@@ -47,10 +49,29 @@ def index():
 def posts_line():
     session = db_session.create_session()
     first_20 = session.query(Post).limit(20).all()
-    deltas = [time_tool.get_delta(item.creation_time) for item in first_20]
-    likes_counts = [len(elem.likes) for elem in first_20]
-    posts = list(zip(first_20, deltas, likes_counts))
+    posts = [[item, time_tool.get_delta(item.creation_time), len(item.likes)] for item in first_20]
     return render_template("posts_line.html", title='Лента', posts=posts)
+
+
+@app.route('/view_post/<int:post_id>', methods=['POST', 'GET'])
+def view_post(post_id):
+    session = db_session.create_session()
+    post = session.get(Post, post_id)
+    if post:
+        if request.method == 'POST':
+            comment_text = request.form.get('comment')
+            new_comment = Comment(
+                post_id=post_id,
+                author_id=current_user.id,
+                content=comment_text
+            )
+            session.add(new_comment)
+            session.commit()
+        str_delta = time_tool.get_delta(post.creation_time)
+        likes_count = len(post.likes)
+        return render_template('view_post.html', title='Просмотр поста', post=post, delta=str_delta,
+                               likes_count=likes_count)
+    return redirect("/posts_line")
 
 
 @app.route('/profile')
@@ -73,6 +94,13 @@ def delete_profile(user_id):
         session.commit()
         return redirect('/register')
     return abort(404)
+
+
+# TODO: редактирование профиля
+@app.route('/profile/edit/<int:id>')
+def profile_edit(user_id):
+    if current_user.id != user_id:
+        abort(404)
 
 
 @app.route('/about_us')
@@ -160,7 +188,7 @@ def create_post():
     form = PostCreation()
     if form.validate_on_submit():
         session = db_session.create_session()
-        author = session.query(User).get(current_user.id)
+        author = session.get(User, current_user.id)
         file = form.contents.data
         if file:
             img = Im.open(file)
@@ -188,36 +216,13 @@ def create_post():
                             )
         session.add(new_post)
         session.commit()
-        return redirect('/posts_line')
+        return redirect('/success')
     return render_template('post_creation.html', title='Публикация поста', form=form)
 
 
-@app.route('/view_post/<int:post_id>', methods=['POST', 'GET'])
-def view_post(post_id):
-    session = db_session.create_session()
-    post = session.get(Post, post_id)
-    if post:
-        if request.method == 'POST':
-            comment_text = request.form.get('comment')
-            new_comment = Comment(
-                post_id=post_id,
-                author_id=current_user.id,
-                content=comment_text
-            )
-            session.add(new_comment)
-            session.commit()
-        str_delta = time_tool.get_delta(post.creation_time)
-        likes_count = len(post.likes)
-        return render_template('view_post.html', title='Просмотр поста', post=post, delta=str_delta,
-                               likes_count=likes_count)
-    return redirect("/posts_line")
-
-
-# TODO: редактирование профиля
-@app.route('/profile/edit/<int:id>')
-def profile_edit(user_id):
-    if current_user.id != user_id:
-        abort(404)
+@app.route('/success')
+def success():
+    return render_template('success.html')
 
 
 def main():
