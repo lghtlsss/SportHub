@@ -4,8 +4,8 @@
 
 <h1 class="feed-title">Ваша лента</h1>
 
-<div>
-    {% for post, delta, likes in posts %}
+<div class="feed-container">
+    {% for post, delta, likes, image in posts %}
     <div class="post" data-id="{{ post.id }}">
         <div class="post-content">
             <div class="post-header">
@@ -17,10 +17,11 @@
             <h2 class="post-title">
                 {{ post.title }}
             </h2>
-
+            {% if image %}
             <div class="image-wrapper">
-                <img src="/api/images/{{post.id}}" alt="Изображение">
+                <img src="/api/images/{{post.id}}" alt="Изображение" loading="lazy">
             </div>
+            {% endif %}
 
             <div class="post-body" style="white-space: pre-wrap; word-break: break-word;">
                 {{ post.text }}
@@ -85,35 +86,35 @@
 
     async function loadMorePosts() {
 
-    if (loading || finished) return;
+        if (loading || finished) return;
 
-    loading = true;
+        loading = true;
 
-    let url = "/api/feed";
+        let url = "/api/feed";
 
-    if (last_id !== null) {
-        url += `?last_id=${last_id}`;
-    }
+        if (last_id !== null) {
+            url += `?last_id=${last_id}`;
+        }
 
-    const res = await fetch(url);
-    const data = await res.json();
+        const res = await fetch(url);
+        const data = await res.json();
 
-    if (!data.posts || data.posts.length === 0) {
-        finished = true;
-        loading = false;
-        return;
-    }
+        if (!data.posts || data.posts.length === 0) {
+            finished = true;
+            loading = false;
+            return;
+        }
 
-    const container = document.querySelector(".feed-container");
+        const container = document.querySelector(".feed-container");
 
-    for (const post of data.posts) {
+        for (const post of data.posts) {
 
-        const div = document.createElement("div");
+            const div = document.createElement("div");
 
-        div.className = "post";
-        div.setAttribute("data-id", post.id);
+            div.className = "post";
+            div.setAttribute("data-id", post.id);
 
-        div.innerHTML = `
+            div.innerHTML = `
             <div class="post-content">
 
                 <div class="post-header">
@@ -126,10 +127,11 @@
                     ${post.title}
                 </h2>
 
+                ${post.has_image ? `
                 <div class="image-wrapper">
                     <img src="/api/images/${post.id}" alt="Изображение">
                 </div>
-
+                    ` : ""}
                 <div class="post-body" style="white-space: pre-wrap; word-break: break-word;">
                     ${post.text}
                 </div>
@@ -149,18 +151,19 @@
             </div>
         `;
 
-        container.appendChild(div);
+            container.appendChild(div);
+        }
+
+        // КЛЮЧЕВОЙ МОМЕНТ
+        last_id = data.last_id;
+
+        if (last_id === null) {
+            finished = true;
+        }
+
+        loading = false;
     }
 
-    // КЛЮЧЕВОЙ МОМЕНТ
-    last_id = data.last_id;
-
-    if (last_id === null) {
-        finished = true;
-    }
-
-    loading = false;
-}
     /* scroll detector */
     window.addEventListener("scroll", () => {
 

@@ -4,7 +4,7 @@ from flask_restful import Api, abort
 
 from app_dir.app_class import app
 from forms.__all_forms import *
-from data import db_session, avatar, image
+from data import db_session
 from data.__all_models import *
 from resources.post_resource import PostResource, PostListResource
 from resources.user_resourse import UserResource, ListUserResource
@@ -15,7 +15,9 @@ from resources.feed_resource import FeedResource
 
 from PIL import Image as Im
 import io
-from tools import time_tool
+from tools import time_tool, image_request_tool
+
+# TODO: flask-limiter
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -47,8 +49,9 @@ def index():
 @login_required
 def posts_line():
     session = db_session.create_session()
-    first_20 = session.query(Post).order_by(Post.id.desc()).limit(5).all()
-    posts = [[item, time_tool.get_delta(item.creation_time), len(item.likes)] for item in first_20]
+    first_5 = session.query(Post).order_by(Post.id.desc()).limit(5).all()
+    posts = [[item, time_tool.get_delta(item.creation_time), len(item.likes), image_request_tool.check_image(item.id)]
+             for item in first_5]
     return render_template("posts_line.html", title='Лента', posts=posts)
 
 
