@@ -71,8 +71,9 @@ def view_post(post_id):
             session.commit()
         str_delta = time_tool.get_delta(post.creation_time)
         likes_count = len(post.likes)
+        is_image = image_request_tool.check_image(post_id)
         return render_template('view_post.html', title='Просмотр поста', post=post, delta=str_delta,
-                               likes_count=likes_count)
+                               likes_count=likes_count, is_image=is_image)
     return redirect("/posts_line")
 
 
