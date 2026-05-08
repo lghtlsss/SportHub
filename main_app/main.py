@@ -43,7 +43,6 @@ def index():
     return render_template("index.html", title='Главная')
 
 
-# TODO: Сделать без подзагрузок с js + api
 @app.route("/posts_line")
 @login_required
 def posts_line():
