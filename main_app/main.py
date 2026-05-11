@@ -232,6 +232,7 @@ def create_post():
             session.flush()
             new_post = Post(title=form.title.data,
                             author=f'{author.name} {author.surname}',
+                            author_id = current_user.id,
                             text=form.text.data,
                             topic=form.topic.data,
                             image=image
@@ -239,6 +240,7 @@ def create_post():
         else:
             new_post = Post(title=form.title.data,
                             author=f'{author.name} {author.surname}',
+                            author_id=current_user.id,
                             text=form.text.data,
                             topic=form.topic.data,
                             )

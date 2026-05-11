@@ -10,6 +10,7 @@ class Post(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'Posts'
     id = Column(Integer, primary_key=True, autoincrement=True)
     author = Column(String)
+    author_id = Column(Integer)
     title = Column(String)
     text = Column(String)
     topic = Column(String, nullable=True)
