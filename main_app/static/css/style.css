@@ -922,3 +922,18 @@ html, body {
     overflow-x: hidden;
     padding-top: 80px;
 }
+
+.subscribe-btn {
+    width: 150px;
+
+    padding: 2px 8px;
+
+    font-size: 13px;
+
+    line-height: 1.2;
+
+    border: none;
+    border-radius: 12px;
+
+    cursor: pointer;
+}
