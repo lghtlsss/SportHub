@@ -140,8 +140,7 @@ def about_us():
 @login_required
 def subscriptions():
     session = db_session.create_session()
-    user = session.get(User, current_user.id)
-    subs = session.query(Subscriber).filter(Subscriber.subscriber_user_id == user.id).all()
+    subs = session.query(Subscriber).filter(Subscriber.subscriber_user_id == current_user.id).all()
     return render_template('subscriptions.html', title='Подписки',
                            subs=[[item.user.name, item.user.surname] for item in subs])
 
@@ -232,7 +231,7 @@ def create_post():
             session.flush()
             new_post = Post(title=form.title.data,
                             author=f'{author.name} {author.surname}',
-                            author_id = current_user.id,
+                            author_id=current_user.id,
                             text=form.text.data,
                             topic=form.topic.data,
                             image=image
