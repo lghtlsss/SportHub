@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="form-container">
+
+    <h1>Редактирование профиля</h1>
+    <br>
+    <br>
+
+    <form method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.name(class="form-input", placeholder=" ") }}
+            <label class="form-label">{{ form.name.label.text }}</label>
+            {% for error in form.name.errors %}
+            <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.surname(class="form-input", placeholder=" ") }}
+            <label class="form-label">{{ form.surname.label.text }}</label>
+            {% for error in form.surname.errors %}
+            <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.age(class="form-input", placeholder=" ") }}
+            <label class="form-label">{{ form.age.label.text }}</label>
+            {% for error in form.age.errors %}
+            <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.description(class="form-input", placeholder=" ") }}
+            <label class="form-label">{{ form.description.label.text }}</label>
+            {% for error in form.description.errors %}
+            <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            <p>
+                {{ form.pref_sport.label.text }}
+            </p>
+
+            <div class="checkbox-group">
+
+                {% for value, label in form.pref_sport.choices %}
+                <label style="margin: auto; padding-top:3%">
+
+                    <input type="checkbox"
+                           name="{{ form.pref_sport.name }}"
+                           value="{{ value }}"
+                           class="checkbox-input"
+                           {% if form.pref_sport.data and value in form.pref_sport.data %}checked{% endif %}>
+
+                    <span class="checkbox-card">
+                    {{ label }}
+                </span>
+
+                </label>
+                {% endfor %}
+
+            </div>
+
+            {% for error in form.pref_sport.errors %}
+            <div class="form-error">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        {{ form.submit(class="form-btn") }}
+
+        <div class="form-error" style="margin-top: 10px;">
+            {{ message }}
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}
