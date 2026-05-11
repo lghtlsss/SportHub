@@ -22,27 +22,33 @@ class CommentResource(Resource):
     def get(self):
         """Возвращает json комментариев пользователя под определённым постом"""
         session = create_session()
-        args = parser.parse_args()
-        post_id, user_id = args['post_id'], args['user_id']
-        comments = session.query(Comment).filter_by(post_id=post_id, author_id=user_id).all()
-        return jsonify({'comments': [item.to_dict(only=['id', 'post_id', 'author_id', 'content', 'creation_time']) for
-                                     item in comments]})
+        try:
+            args = parser.parse_args()
+            post_id, user_id = args['post_id'], args['user_id']
+            comments = session.query(Comment).filter_by(post_id=post_id, author_id=user_id).all()
+            return jsonify({'comments': [item.to_dict(only=['id', 'post_id', 'author_id', 'content', 'creation_time']) for
+                                         item in comments]})
+        finally:
+            session.close()
 
     def post(self):
         session = create_session()
-        args = parser.parse_args()
-        post_id, user_id = args['post_id'], args['user_id']
-        text = args['content']
-        if not text:
-            return abort(404, message='Empty content')
-        comment = Comment(
-            post_id=post_id,
-            author_id=user_id,
-            content=text
-        )
-        session.add(comment)
-        session.commit()
-        return jsonify({'message': 'success', 'comm_id': comment.id})
+        try:
+            args = parser.parse_args()
+            post_id, user_id = args['post_id'], args['user_id']
+            text = args['content']
+            if not text:
+                return abort(404, message='Empty content')
+            comment = Comment(
+                post_id=post_id,
+                author_id=user_id,
+                content=text
+            )
+            session.add(comment)
+            session.commit()
+            return jsonify({'message': 'success', 'comm_id': comment.id})
+        finally:
+            session.close()
 
 
 list_parser = reqparse.RequestParser()
@@ -53,8 +59,11 @@ class CommentListResource(Resource):
     def get(self):
         """Возвращает json всех комментариев по id поста из list_parser"""
         session = create_session()
-        comments = session.query(Comment).all()
-        if not comments:
-            return abort(404, message='Not found')
-        return jsonify({'comments': [item.to_dict(only=['id', 'post_id', 'author_id', 'content', 'creation_time']) for
-                                     item in comments]})
+        try:
+            comments = session.query(Comment).all()
+            if not comments:
+                return abort(404, message='Not found')
+            return jsonify({'comments': [item.to_dict(only=['id', 'post_id', 'author_id', 'content', 'creation_time']) for
+                                         item in comments]})
+        finally:
+            session.close()

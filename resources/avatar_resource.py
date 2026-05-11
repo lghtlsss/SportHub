@@ -9,13 +9,17 @@ from data.db_session import create_session
 def abort_if_not_found(session, thing_id, thing_class):
     thing = session.get(thing_class, thing_id)
     if not thing:
+        session.close()
         abort(404, message='Not found')
 
 
 class AvatarResource(Resource):
     def get(self, user_id):
         session = create_session()
-        abort_if_not_found(session, user_id, User)
-        user = session.get(User, user_id)
-        avatar = user.avatar
-        return Response(avatar.content, mimetype=avatar.mime)
+        try:
+            abort_if_not_found(session, user_id, User)
+            user = session.get(User, user_id)
+            avatar = user.avatar
+            return Response(avatar.content, mimetype=avatar.mime)
+        finally:
+            session.close()

@@ -27,14 +27,19 @@ class PostResource(Resource):
             return jsonify({'post': post.to_dict(only=['author', 'title', 'text', 'topic']), 'likes': likes_count})
         except Exception as e:
             return {'error': str(e)}, 500
+        finally:
+            session.close()
 
     def delete(self, post_id):
         session = db_session.create_session()
-        abort_if_not_found(session, post_id)
-        post = session.query(Post).get(post_id)
-        session.delete(post)
-        session.commit()
-        return jsonify({'message': 'success'})
+        try:
+            abort_if_not_found(session, post_id)
+            post = session.query(Post).get(post_id)
+            session.delete(post)
+            session.commit()
+            return jsonify({'message': 'success'})
+        finally:
+            session.close()
 
     def patch(self, post_id):
         session = db_session.create_session()
@@ -52,7 +57,7 @@ class PostResource(Resource):
                 session.add(Like(user_id=user.id, post_id=post_id))
             session.commit()
             likes_count = session.query(Like).filter_by(post_id=post_id).count()
-    
+
             return {'likes': likes_count}
         finally:
             session.close()
@@ -76,20 +81,26 @@ list_parser.add_argument('topic', required=True)
 class PostListResource(Resource):
     def get(self):
         session = db_session.create_session()
-        posts = session.query(Post).all()
-        if not posts:
-            abort(404, message='Not found')
-        return jsonify({'posts': [item.to_dict(only=['id', 'author', 'title', 'text', 'topic']) for item in posts]})
+        try:
+            posts = session.query(Post).all()
+            if not posts:
+                abort(404, message='Not found')
+            return jsonify({'posts': [item.to_dict(only=['id', 'author', 'title', 'text', 'topic']) for item in posts]})
+        finally:
+            session.close()
 
     def post(self):
-        args = list_parser.parse_args()
         session = db_session.create_session()
-        new_post = Post(
-            author=args['author'],
-            text=args['text'],
-            contents=args['contents'],
-            topic=args['topic']
-        )
-        session.add(new_post)
-        session.commit()
-        return jsonify({'id': new_post.id})
+        try:
+            args = list_parser.parse_args()
+            new_post = Post(
+                author=args['author'],
+                text=args['text'],
+                contents=args['contents'],
+                topic=args['topic']
+            )
+            session.add(new_post)
+            session.commit()
+            return jsonify({'id': new_post.id})
+        finally:
+            session.close()
