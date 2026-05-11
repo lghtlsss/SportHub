@@ -17,7 +17,7 @@ from PIL import Image as Im
 import io
 from tools import time_tool, image_request_tool
 
-# TODO: пофиксить проблему с падением сайта из за большого кол-ва запросов
+# TODO: пофиксить проблему с падением сайта из-за большого кол-ва запросов
 # TODO: flask-limiter
 
 login_manager = LoginManager()
