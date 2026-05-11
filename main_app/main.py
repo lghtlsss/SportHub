@@ -100,7 +100,6 @@ def delete_profile(user_id):
     return abort(404)
 
 
-# TODO: редактирование профиля
 @app.route('/profile/edit/<int:user_id>', methods=["POST", "GET"])
 @login_required
 def profile_edit(user_id):
