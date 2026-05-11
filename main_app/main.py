@@ -220,7 +220,7 @@ def create_post():
         file = form.contents.data
         if file:
             img = Im.open(file)
-            # img.thumbnail((256, 256))
+            img.thumbnail((1920, 1080))
             img = img.convert("RGB")
             buffer = io.BytesIO()
             img.save(buffer, format="JPEG", quality=85)
@@ -254,7 +254,7 @@ def success():
 
 
 def main():
-    db_session.global_init('../db/base_14.db')
+    db_session.global_init('../db/base_15.db')
     app.run(port=8070, host='127.0.0.1', debug=True)
 
 
