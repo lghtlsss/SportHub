@@ -17,6 +17,7 @@ from PIL import Image as Im
 import io
 from tools import time_tool, image_request_tool
 
+# TODO: пофиксить проблему с падением сайта из за большого кол-ва запросов
 # TODO: flask-limiter
 
 login_manager = LoginManager()
@@ -100,10 +101,36 @@ def delete_profile(user_id):
 
 
 # TODO: редактирование профиля
-@app.route('/profile/edit/<int:id>')
+@app.route('/profile/edit/<int:user_id>', methods=["POST", "GET"])
+@login_required
 def profile_edit(user_id):
-    if current_user.id != user_id:
-        abort(404)
+    form = EdbtProfileForm()
+    session = db_session.create_session()
+    user = session.get(User, user_id)
+    if user:
+        if request.method == 'GET':
+            form.name.data = user.name
+            form.surname.data = user.surname
+            form.age.data = user.age
+            form.description.data = user.description
+            form.pref_sport.data = user.pref_sport
+            return render_template('profile_edit.html', form=form)
+        if form.validate_on_submit():
+            if form.name.data:
+                user.name = form.name.data
+            if form.surname.data:
+                user.surname = form.surname.data
+            if form.age.data:
+                user.age = form.age.data
+            if form.description.data:
+                user.description = form.description.data
+            if form.pref_sport.data:
+                user.pref_sport = ", ".join(form.pref_sport.data)
+            session.commit()
+            session.close()
+            return redirect('/profile')
+
+    return abort(404, message='User not found')
 
 
 @app.route('/about_us')
@@ -131,7 +158,7 @@ def register():
                 file = form.avatar.data
                 if file:
                     img = Im.open(file)
-                    # img.thumbnail((1024, 1024))
+                    img.thumbnail((256, 256))
                     img = img.convert("RGB")
                     buffer = io.BytesIO()
                     img.save(buffer, format="JPEG", quality=95)
@@ -154,7 +181,7 @@ def register():
                     surname=form.surname.data,
                     age=form.age.data,
                     description=form.description.data,
-                    pref_sport=",".join(form.pref_sport.data)
+                    pref_sport=", ".join(form.pref_sport.data)
                 )
                 new_user.set_password(form.password.data)
                 session.add(new_user)
@@ -195,7 +222,7 @@ def create_post():
         file = form.contents.data
         if file:
             img = Im.open(file)
-            img.thumbnail((256, 256))
+            # img.thumbnail((256, 256))
             img = img.convert("RGB")
             buffer = io.BytesIO()
             img.save(buffer, format="JPEG", quality=85)
@@ -230,7 +257,7 @@ def success():
 
 def main():
     db_session.global_init('../db/base_14.db')
-    app.run(port=8080, host='127.0.0.1', debug=True)
+    app.run(port=8070, host='127.0.0.1', debug=True)
 
 
 if __name__ == '__main__':
