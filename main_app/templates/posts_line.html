@@ -10,7 +10,7 @@
         <div class="post-content">
             <div class="post-header">
             <span class="post-info">
-                {{ post.author }} {{ delta }} <button class="subscribe-btn">Подписаться</button>
+                {{ post.author }} {{ delta }}
             </span>
             </div>
 
@@ -47,7 +47,6 @@
 
 <script>
     function toggleLike(post_id, user, btn) {
-        console.log("CLICK", post_id);
         fetch(`/api/post/${post_id}`, {
             method: 'PATCH',
             headers: {
