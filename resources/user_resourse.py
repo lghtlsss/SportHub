@@ -50,8 +50,6 @@ class UserResource(Resource):
                 ))
                 session.commit()
                 return jsonify({'new_btn_text': 'Отписаться'})
-            # subscribers = session.query(Subscriber).filter(Subscriber.user_id == user.id)
-            # return jsonify({'subs': [item.to_dict() for item in subscribers]})
         finally:
             session.close()
 
