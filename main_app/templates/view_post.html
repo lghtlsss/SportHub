@@ -8,7 +8,10 @@
 
         <div class="post-header">
             <span class="post-info">
-                {{ post.author }} {{ delta }} <button class="subscribe-btn">Подписаться</button>
+                {{ post.author }} {{ delta }} {% if current_user.id != post.author_id %}
+                <button onclick="toggleSubscribe({{ current_user.id }}, {{ post.author_id }},  this)"
+                        class="subscribe-btn">Подписаться</button>
+                {% endif %}
             </span>
         </div>
 
@@ -79,6 +82,23 @@
     </div>
 </div>
 <script>
+    function toggleSubscribe(user_id, sub_id, btn) {
+        console.log('Click', sub_id, user_id)
+        fetch(`/api/users/${user_id}`, {
+            method: 'PATCH',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                subscription_user: sub_id
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                btn.innerText = data["new_btn_text"];
+            });
+
+    }
+
     function toggleLike(post_id, user, btn) {
         fetch(`/api/post/${post_id}`, {
             method: 'PATCH',
