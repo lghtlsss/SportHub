@@ -147,7 +147,7 @@ def subscriptions():
     session = db_session.create_session()
     subs = session.query(Subscriber).filter(Subscriber.subscriber_user_id == current_user.id).all()
     return render_template('subscriptions.html', title='Подписки',
-                           subs=[[item.user.name, item.user.surname] for item in subs])
+                           subs=[[item.id, item.user.name, item.user.surname] for item in subs])
 
 
 @app.route('/register', methods=['POST', 'GET'])
