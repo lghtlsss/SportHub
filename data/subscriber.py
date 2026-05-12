@@ -11,6 +11,3 @@ class Subscriber(SqlAlchemyBase, SerializerMixin):
     user_id = Column(Integer, ForeignKey("Users.id"))
     subscriber_user_id = Column(Integer)
     user = relationship('User', back_populates='subscribers')
-
-    def __repr__(self):
-        return f'{self.user.name} {self.user.surname}'
