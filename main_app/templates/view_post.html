@@ -10,7 +10,12 @@
             <span class="post-info">
                 {{ post.author }} {{ delta }} {% if current_user.id != post.author_id %}
                 <button onclick="toggleSubscribe({{ current_user.id }}, {{ post.author_id }},  this)"
-                        class="subscribe-btn">Подписаться</button>
+                        class="subscribe-btn">
+                    {% if is_subscribed %}
+                        Отписаться
+                    {% else %}
+                        Подписаться
+                    {% endif %}</button>
                 {% endif %}
             </span>
         </div>

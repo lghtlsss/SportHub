@@ -72,8 +72,11 @@ def view_post(post_id):
         str_delta = time_tool.get_delta(post.creation_time)
         likes_count = len(post.likes)
         is_image = image_request_tool.check_image(post_id)
+        subs = session.query(Subscriber).filter(Subscriber.user_id == post.author_id).all()
+        is_subscribed = any([0 if sub.subscriber_user_id != current_user.id else 1 for sub in subs])
+        # print([0 if sub.subscriber_user_id != current_user.id else 1 for sub in subs])
         return render_template('view_post.html', title='Просмотр поста', post=post, delta=str_delta,
-                               likes_count=likes_count, is_image=is_image)
+                               likes_count=likes_count, is_image=is_image, is_subscribed=is_subscribed)
     return redirect("/posts_line")
 
 

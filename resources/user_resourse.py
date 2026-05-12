@@ -31,7 +31,6 @@ class UserResource(Resource):
         finally:
             session.close()
 
-    # TODO: Доделать кнопку подписки/отписки, почему-то не отписывается подозреваю, что неправильные аргументы в js
     def patch(self, user_id):
         session = db_session.create_session()
         self.abort_if_user_not_found(session, user_id)
