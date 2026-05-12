@@ -31,6 +31,7 @@ class UserResource(Resource):
         finally:
             session.close()
 
+    # TODO: Доделать кнопку подписки/отписки, почему-то не отписывается подозреваю, что неправильные аргументы в js
     def patch(self, user_id):
         session = db_session.create_session()
         self.abort_if_user_not_found(session, user_id)
@@ -41,15 +42,17 @@ class UserResource(Resource):
                                                       subscriber_user_id=user.id).first()
             if sub:
                 session.delete(sub)
+                session.commit()
+                return jsonify({'new_btn_text': 'Подписаться'})
             else:
                 session.add(Subscriber(
                     user_id=args['subscription_user'],
                     subscriber_user_id=user.id
                 ))
-            session.commit()
-
-            subscribers = session.query(Subscriber).filter(Subscriber.user_id == user.id)
-            return jsonify({'subs': [item.to_dict() for item in subscribers]})
+                session.commit()
+                return jsonify({'new_btn_text': 'Отписаться'})
+            # subscribers = session.query(Subscriber).filter(Subscriber.user_id == user.id)
+            # return jsonify({'subs': [item.to_dict() for item in subscribers]})
         finally:
             session.close()
 
