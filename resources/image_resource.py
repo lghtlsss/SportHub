@@ -9,7 +9,7 @@ class ImageResource(Resource):
     def get(self, post_id):
         session = create_session()
         try:
-            image = session.query(Image).filter_by(post_id=post_id).first()
+            image = session.query(Image).filter(Image.post_id == post_id).first()
             if image:
                 return Response(image.content, mimetype=image.mime)
             return Response()
