@@ -52,10 +52,10 @@ project/
 │   └── app_class.py
 ├── data/
 │   ├── __all_models.py
-│   ├── admin.py
 │   ├── avatar.py
 │   ├── comment.py
 │   ├── db_session.py
+│   ├── image.py
 │   ├── like.py
 │   ├── post.py
 │   ├── subscriber.py
@@ -64,6 +64,7 @@ project/
 ├── main_app/
 │   ├── forms/
 │   │   ├── __all_forms.py
+│   │   ├── edit_profile_form.py
 │   │   ├── login_form.py
 │   │   ├── post_creation_form.py
 │   │   └── registration_form.py
@@ -76,6 +77,7 @@ project/
 │   │   │   ├──no_avatar.jpg
 │   │   │   ├──running_city.jpg
 │   │   │   ├──running_city2.jpg
+│   │   │   ├──icon.png
 │   ├── templates/
 │   │   ├── about_us.html
 │   │   ├── base.html
@@ -85,13 +87,23 @@ project/
 │   │   ├── post_creation.html
 │   │   ├── posts_line.html
 │   │   ├── profile.html
+│   │   ├── profile_edit.html
 │   │   ├── register.html
-│   │   └── subscriptions.html
+│   │   ├── subscribers.html
+│   │   ├── subscriptions.html
+│   │   ├── success.html
+│   │   └── view_post.html
+│   ├── tools/
+│   │   ├── image_request_tool.html
+│   │   └── time_tool.html
 │   └── main.py
 ├── resources/
 │   ├── avatar_resource.py
 │   ├── post_resource.py
 │   └── user_resourse.py
+│   └── feed_resource.py
+│   └── image_resource.py
+│   └── comment_resource.py
 ├── .gitignore
 ├── README.md
 └── requirements.txt
@@ -139,7 +151,7 @@ python app.py
 
 * Используется Jinja2 для шаблонов
 * Собственный api
-* Динамическая загрузка аватарок через API (`/api/avatar/<id>`)
+* Динамическая загрузка аватарок/картинок через API
 * Гибкая архитектура для масштабирования
 
 ---
