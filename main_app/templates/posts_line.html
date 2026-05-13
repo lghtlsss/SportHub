@@ -5,21 +5,32 @@
 <h1 class="feed-title">{{ page_title }}</h1>
 
 <div class="feed-container">
+
     {% for post, delta, likes, image in posts %}
+
     <div class="post" data-id="{{ post.id }}">
+
         <div class="post-content">
+
             <div class="post-header">
-            <span class="post-info">
-                {{ post.author }} {{ delta }}
-            </span>
+                <span class="post-info">
+                    {{ post.author }} {{ delta }}
+                </span>
             </div>
 
             <h2 class="post-title">
                 {{ post.title }}
             </h2>
+
             {% if image %}
             <div class="image-wrapper">
-                <img src="/api/images/{{post.id}}" alt="Изображение" loading="lazy">
+                <img
+                        src="/api/images/{{ post.id }}"
+                        alt="Изображение"
+                        loading="lazy"
+                        class="post-image"
+                        onclick="openImage(this.src)"
+                >
             </div>
             {% endif %}
 
@@ -28,9 +39,11 @@
             </div>
 
             <div class="post-footer">
-                <button onclick="toggleLike({{post.id}}, {{current_user.id}}, this)">
+
+                <button onclick="toggleLike({{ post.id }}, {{ current_user.id }}, this)">
                     ♡ {{ likes }}
                 </button>
+
                 <a class="post-link-btn" href="/view_post/{{ post.id }}">
                     Открыть пост
                 </a>
@@ -45,43 +58,91 @@
 
 </div>
 
+<!-- FULLSCREEN IMAGE MODAL -->
+
+<div id="imageModal" class="image-modal">
+
+    <img
+            id="modalImage"
+            class="modal-image"
+            src=""
+            alt="Полноразмерное изображение"
+    >
+
+</div>
+
 <script>
+
+    /* =========================
+       FULLSCREEN IMAGE
+    ========================== */
+
+    const imageModal = document.getElementById("imageModal");
+    const modalImage = document.getElementById("modalImage");
+
+    function openImage(src) {
+        console.log('CLICK', src)
+
+        modalImage.src = src;
+
+        imageModal.classList.add("active");
+
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeImage() {
+
+        imageModal.classList.remove("active");
+
+        document.body.style.overflow = "";
+    }
+
+    imageModal.addEventListener("click", closeImage);
+
+    document.addEventListener("keydown", (e) => {
+
+        if (e.key === "Escape") {
+            closeImage();
+        }
+
+    });
+
+    /* =========================
+       LIKES
+    ========================== */
+
     function toggleLike(post_id, user, btn) {
+
         fetch(`/api/post/${post_id}`, {
-            method: 'PATCH',
+
+            method: "PATCH",
+
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
                 user: user,
                 likes: 1
             })
+
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data);
+
                 btn.innerText = `♡ ${data.likes}`;
+
             });
+
     }
+
+    /* =========================
+       INFINITE SCROLL
+    ========================== */
 
     let loading = false;
     let finished = false;
     let last_id = null;
-
-    // контейнер, куда добавляем посты
-    const feedContainer = document.querySelector(".feed-container");
-
-    // если у тебя нет класса — оборачиваем существующий блок
-    if (!feedContainer) {
-        const wrapper = document.createElement("div");
-        wrapper.className = "feed-container";
-
-        // переносим все посты внутрь контейнера
-        const posts = document.querySelectorAll(".post");
-        posts.forEach(p => wrapper.appendChild(p));
-
-        document.body.appendChild(wrapper);
-    }
 
     async function loadMorePosts() {
 
@@ -99,8 +160,10 @@
         const data = await res.json();
 
         if (!data.posts || data.posts.length === 0) {
+
             finished = true;
             loading = false;
+
             return;
         }
 
@@ -111,49 +174,63 @@
             const div = document.createElement("div");
 
             div.className = "post";
+
             div.setAttribute("data-id", post.id);
 
             div.innerHTML = `
-            <div class="post-content">
 
-                <div class="post-header">
-                    <span class="post-info">
-                        ${post.author} ${post.delta}
-                    </span>
-                </div>
+                <div class="post-content">
 
-                <h2 class="post-title">
-                    ${post.title}
-                </h2>
+                    <div class="post-header">
 
-                ${post.has_image ? `
-                <div class="image-wrapper">
-                    <img src="/api/images/${post.id}" alt="Изображение">
-                </div>
+                        <span class="post-info">
+                            ${post.author} ${post.delta}
+                        </span>
+
+                    </div>
+
+                    <h2 class="post-title">
+                        ${post.title}
+                    </h2>
+
+                    ${post.has_image ? `
+
+                    <div class="image-wrapper">
+
+                        <img
+                            src="/api/images/${post.id}"
+                            alt="Изображение"
+                            class="post-image"
+                            onclick="openImage(this.src)"
+                        >
+
+                    </div>
+
                     ` : ""}
-                <div class="post-body" style="white-space: pre-wrap; word-break: break-word;">
-                    ${post.text}
+
+                    <div class="post-body" style="white-space: pre-wrap; word-break: break-word;">
+                        ${post.text}
+                    </div>
+
+                    <div class="post-footer">
+
+                        <button onclick="toggleLike(${post.id}, {{ current_user.id }}, this)">
+                            ♡ ${post.likes}
+                        </button>
+
+                        <a class="post-link-btn" href="/view_post/${post.id}">
+                            Открыть пост
+                        </a>
+
+                    </div>
+
                 </div>
 
-                <div class="post-footer">
-
-                    <button onclick="toggleLike(${post.id}, {{ current_user.id }}, this)">
-                        ♡ ${post.likes}
-                    </button>
-
-                    <a class="post-link-btn" href="/view_post/${post.id}">
-                        Открыть пост
-                    </a>
-
-                </div>
-
-            </div>
-        `;
+            `;
 
             container.appendChild(div);
         }
 
-        // КЛЮЧЕВОЙ МОМЕНТ
         last_id = data.last_id;
 
         if (last_id === null) {
@@ -163,38 +240,86 @@
         loading = false;
     }
 
-    /* scroll detector */
+    /* =========================
+       SCROLL DETECTOR
+    ========================== */
+
     window.addEventListener("scroll", () => {
 
         if (loading || finished) return;
 
         const scrollTop = window.scrollY;
+
         const windowHeight = window.innerHeight;
+
         const docHeight = document.documentElement.scrollHeight;
 
-        const nearBottom = scrollTop + windowHeight >= docHeight - 200;
+        const nearBottom =
+            scrollTop + windowHeight >= docHeight - 200;
 
         if (nearBottom) {
             loadMorePosts();
         }
+
     });
 
-    /*
-        первая инициализация (важно!)
-        берем last_id из последнего уже отрендеренного поста
-    */
+    /* =========================
+       INITIAL LAST_ID
+    ========================== */
+
     window.addEventListener("load", () => {
+
         const posts = document.querySelectorAll(".post");
 
         if (posts.length > 0) {
-            // предполагаем, что backend сортирует DESC
-            // поэтому последний DOM элемент = самый старый
+
             const lastPost = posts[posts.length - 1];
 
-            // можно прокинуть data-id в HTML (лучше), но упрощённо:
             last_id = lastPost.getAttribute("data-id");
         }
-    });
-</script>
 
+    });
+
+</script>
+<style>
+    .image-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+
+    width: 100vw !important;
+    height: 100vh !important;
+
+    background: rgba(0, 0, 0, 0.95) !important;
+
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: opacity 0.2s ease;
+
+    z-index: 999999 !important;
+}
+
+.image-modal.active {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.modal-image {
+    max-width: 95% !important;
+    max-height: 95% !important;
+
+    object-fit: contain !important;
+
+    border-radius: 12px;
+}
+
+.post-image {
+    cursor: zoom-in;
+}
+</style>
 {% endblock %}
