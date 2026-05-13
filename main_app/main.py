@@ -52,7 +52,7 @@ def posts_line():
     first_5 = session.query(Post).order_by(Post.id.desc()).limit(5).all()
     posts = [[item, time_tool.get_delta(item.creation_time), len(item.likes), image_request_tool.check_image(item.id)]
              for item in first_5]
-    return render_template("posts_line.html", title='Лента', posts=posts)
+    return render_template("posts_line.html", title='Лента', posts=posts, page_title='Лента')
 
 
 @app.route('/view_post/<int:post_id>', methods=['POST', 'GET'])
@@ -134,6 +134,19 @@ def profile_edit(user_id):
             return redirect('/profile')
 
     return abort(404, message='User not found')
+
+
+@app.route('/my_posts')
+@login_required
+def my_posts():
+    session = db_session.create_session()
+    try:
+        posts = [
+            [item, time_tool.get_delta(item.creation_time), len(item.likes), image_request_tool.check_image(item.id)]
+            for item in session.query(Post).filter(Post.author_id == current_user.id).all()]
+        return render_template("posts_line.html", page_title='Ваши посты', title='Лента', posts=posts)
+    finally:
+        session.close()
 
 
 @app.route('/about_us')
