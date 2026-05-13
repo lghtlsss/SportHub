@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="subs-page">
+
+    <h1 class="subs-title">Ваши подписчики</h1>
+
+    <div class="subs-container">
+    {% if is_any_subs %}
+        {% for sub in subs %}
+
+        <div class="sub-card">
+
+            <div class="sub-user-info">
+
+                <div class="sub-avatar">
+                    {{ sub.name[0] }}{{ sub.surname[0]  }}
+                </div>
+
+                <div class="sub-user-text">
+                    <h2>{{ sub.name }}{{ sub.surname }}</h2>
+                    <p>Подписан на вас</p>
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+    {% else %}
+        <h2>На вас никто не подписан</h2>
+    {% endif %}
+    </div>
+
+</section>
+
+{% endblock %}
