@@ -286,7 +286,7 @@ def success():
 
 
 def main():
-    db_session.global_init('../db/base_16.db')
+    db_session.global_init('../db/SportHubBase.db')
     app.run(port=8070, host='127.0.0.1', debug=True)
 
 
