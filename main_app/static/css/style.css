@@ -937,3 +937,134 @@ html, body {
 
     cursor: pointer;
 }
+
+/* ===== PAGE ===== */
+.subs-page {
+    padding: 40px 10%;
+}
+
+/* ===== TITLE ===== */
+.subs-title {
+    text-align: center;
+    margin-bottom: 35px;
+
+    color: white;
+    font-size: 32px;
+}
+
+/* ===== CONTAINER ===== */
+.subs-container {
+    max-width: 800px;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* ===== CARD ===== */
+.sub-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 20px;
+    border-radius: 18px;
+
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(12px);
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    transition: 0.2s;
+}
+
+/* hover */
+.sub-card:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(0,255,133,0.2);
+
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+}
+
+/* ===== USER INFO ===== */
+.sub-user-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* ===== AVATAR ===== */
+.sub-avatar {
+    width: 58px;
+    height: 58px;
+
+    border-radius: 50%;
+
+    background: rgba(0,255,133,0.12);
+    border: 2px solid rgba(0,255,133,0.35);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #00ff85;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+/* ===== TEXT ===== */
+.sub-user-text h2 {
+    margin: 0;
+    color: white;
+    font-size: 18px;
+}
+
+.sub-user-text p {
+    margin-top: 4px;
+
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+}
+
+/* ===== BUTTON ===== */
+.sub-btn {
+    padding: 10px 16px;
+
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+
+    background: rgba(255,255,255,0.03);
+
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* hover */
+.sub-btn:hover {
+    border-color: rgba(255,80,80,0.45);
+
+    background: rgba(255,80,80,0.08);
+
+    color: #ff7070;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 700px) {
+
+    .sub-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .sub-btn {
+        width: 100%;
+    }
+
+}

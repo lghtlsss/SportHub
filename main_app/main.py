@@ -163,6 +163,19 @@ def subscriptions():
                            subs=[[item.id, item.user.name, item.user.surname] for item in subs])
 
 
+@app.route('/subscribers')
+@login_required
+def subscribers():
+    session = db_session.create_session()
+    subs = session.get(User, current_user.id).subscribers
+    if subs:
+        subs_users = [session.get(User, sub.subscriber_user_id) for sub in subs]
+        session.close()
+        return render_template('subscribers.html', subs=subs_users, is_any_subs=True)
+    session.close()
+    return render_template('subscribers.html', is_any_subs=False)
+
+
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     form = RegisterForm()
