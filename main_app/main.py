@@ -3,7 +3,8 @@ from flask_login import login_required, logout_user, current_user, LoginManager,
 from flask_restful import Api, abort
 
 from app_dir.app_class import app
-from forms.__all_forms import *
+from main_app.forms.__all_forms import *
+from main_app.tools import time_tool, image_request_tool
 from data import db_session
 from data.__all_models import *
 from resources.post_resource import PostResource, PostListResource
@@ -15,7 +16,6 @@ from resources.feed_resource import FeedResource
 
 from PIL import Image as Im
 import io
-from tools import time_tool, image_request_tool
 
 # TODO: flask-limiter
 
@@ -195,7 +195,7 @@ def register():
                         mime="image/jpeg"
                     )
                 else:
-                    with open('static/images/no_avatar.jpg', 'rb') as no_avatar_f:
+                    with open('main_app/static/images/no_avatar.jpg', 'rb') as no_avatar_f:
                         avatar = Avatar(
                             content=no_avatar_f.read(),
                             mime='image/jpg'
@@ -286,7 +286,7 @@ def success():
 
 
 def main():
-    db_session.global_init('../db/SportHubBase.db')
+    db_session.global_init('db/SportHubBase.db')
     app.run(port=8070, host='0.0.0.0', debug=True)
 
 
