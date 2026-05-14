@@ -94,8 +94,8 @@ project/
 │   │   ├── success.html
 │   │   └── view_post.html
 │   ├── tools/
-│   │   ├── image_request_tool.html
-│   │   └── time_tool.html
+│   │   ├── image_request_tool.py
+│   │   └── time_tool.py
 │   └── main.py
 ├── resources/
 │   ├── avatar_resource.py
