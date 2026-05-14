@@ -144,7 +144,7 @@ def my_posts():
         posts = [
             [item, time_tool.get_delta(item.creation_time), len(item.likes), image_request_tool.check_image(item.id)]
             for item in session.query(Post).filter(Post.author_id == current_user.id).all()]
-        return render_template("posts_line.html", page_title='Ваши посты', title='Лента', posts=posts)
+        return render_template("my_posts.html", page_title='Ваши посты', title='Лента', posts=posts)
     finally:
         session.close()
 
