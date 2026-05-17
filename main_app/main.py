@@ -194,7 +194,7 @@ def register():
         session = db_session.create_session()
         if not session.query(User).filter(User.email == form.email.data).first():
             if form.password.data == form.password_again.data:
-                if not (10 <= form.age.data <= 120):
+                if not (10 <= int(form.age.data) <= 120):
                     file = form.avatar.data
                     if file:
                         img = Im.open(file)
