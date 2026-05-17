@@ -17,7 +17,6 @@ from resources.feed_resource import FeedResource
 from PIL import Image as Im
 import io
 
-# TODO: flask-limiter
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -35,6 +34,7 @@ api.add_resource(FeedResource, '/api/feed')
 
 @login_manager.user_loader
 def load_user(user_id):
+    """Инициализация user loader'а"""
     db_sess = db_session.create_session()
     return db_sess.get(User, user_id)
 
@@ -42,12 +42,14 @@ def load_user(user_id):
 @app.route("/")
 @app.route("/index")
 def index():
+    """Главная страница"""
     return render_template("index.html", title='Главная')
 
 
 @app.route("/posts_line")
 @login_required
 def posts_line():
+    """Лента постов"""
     session = db_session.create_session()
     first_5 = session.query(Post).order_by(Post.id.desc()).limit(5).all()
     posts = [[item, time_tool.get_delta(item.creation_time), len(item.likes), image_request_tool.check_image(item.id)]
@@ -57,6 +59,7 @@ def posts_line():
 
 @app.route('/view_post/<int:post_id>', methods=['POST', 'GET'])
 def view_post(post_id):
+    """Страница просмотра конкретного поста"""
     session = db_session.create_session()
     post = session.get(Post, post_id)
     try:
@@ -85,6 +88,7 @@ def view_post(post_id):
 @app.route('/profile')
 @login_required
 def profile():
+    """Отображение профиля"""
     session = db_session.create_session()
     user = session.get(User, current_user.id)
     return render_template("profile.html", name=user.name, surname=user.surname, age=user.age,
@@ -94,6 +98,7 @@ def profile():
 @app.route('/profile/delete/<int:user_id>')
 @login_required
 def delete_profile(user_id):
+    """Удаление профиля"""
     session = db_session.create_session()
     user = session.get(User, user_id)
     if user:
@@ -107,6 +112,7 @@ def delete_profile(user_id):
 @app.route('/profile/edit/<int:user_id>', methods=["POST", "GET"])
 @login_required
 def profile_edit(user_id):
+    """Редактирование профиля через форму"""
     form = EdbtProfileForm()
     session = db_session.create_session()
     user = session.get(User, user_id)
@@ -139,6 +145,7 @@ def profile_edit(user_id):
 @app.route('/my_posts')
 @login_required
 def my_posts():
+    """Страница всех постов пользователя"""
     session = db_session.create_session()
     try:
         posts = [
@@ -151,12 +158,14 @@ def my_posts():
 
 @app.route('/about_us')
 def about_us():
+    """Страница 'о нас'"""
     return render_template('about_us.html', title='О нас')
 
 
 @app.route('/subscriptions')
 @login_required
 def subscriptions():
+    """Страница подписок пользователя"""
     session = db_session.create_session()
     subs = session.query(Subscriber).filter(Subscriber.subscriber_user_id == current_user.id).all()
     return render_template('subscriptions.html', title='Подписки',
@@ -166,6 +175,7 @@ def subscriptions():
 @app.route('/subscribers')
 @login_required
 def subscribers():
+    """Страница подписчиков пользователя"""
     session = db_session.create_session()
     subs = session.get(User, current_user.id).subscribers
     if subs:
@@ -178,6 +188,7 @@ def subscribers():
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
+    """Страница регистрации пользователя с помощью формы"""
     form = RegisterForm()
     if form.validate_on_submit():
         session = db_session.create_session()
@@ -222,6 +233,7 @@ def register():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    """Страница логина пользователя"""
     form = LoginForm()
     if form.validate_on_submit():
         session = db_session.create_session()
@@ -236,6 +248,7 @@ def login():
 @app.route('/logout')
 @login_required
 def logout():
+    """Выход из профиля"""
     logout_user()
     return redirect('/')
 
@@ -243,6 +256,7 @@ def logout():
 @app.route('/create_post', methods=['POST', 'GET'])
 @login_required
 def create_post():
+    """Страница создания поста"""
     form = PostCreation()
     if form.validate_on_submit():
         session = db_session.create_session()
@@ -282,6 +296,7 @@ def create_post():
 
 @app.route('/success')
 def success():
+    """Страница, куда пользователь перенаправляется после успешного создания поста"""
     return render_template('success.html')
 
 
