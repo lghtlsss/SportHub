@@ -2,6 +2,7 @@ from flask import Flask
 
 
 class MyApp(Flask):
+    """Основной класс приложения"""
     def __init__(self, *args, **kwargs):
         super(MyApp, self).__init__(*args, **kwargs)
         self.config['SECRET_KEY'] = "super_secret_key"
