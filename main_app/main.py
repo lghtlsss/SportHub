@@ -194,38 +194,40 @@ def register():
         session = db_session.create_session()
         if not session.query(User).filter(User.email == form.email.data).first():
             if form.password.data == form.password_again.data:
-                file = form.avatar.data
-                if file:
-                    img = Im.open(file)
-                    img.thumbnail((256, 256))
-                    img = img.convert("RGB")
-                    buffer = io.BytesIO()
-                    img.save(buffer, format="JPEG", quality=95)
-                    avatar = Avatar(
-                        content=buffer.getvalue(),
-                        mime="image/jpeg"
-                    )
-                else:
-                    with open('main_app/static/images/no_avatar.jpg', 'rb') as no_avatar_f:
+                if not (10 <= form.age.data <= 120):
+                    file = form.avatar.data
+                    if file:
+                        img = Im.open(file)
+                        img.thumbnail((256, 256))
+                        img = img.convert("RGB")
+                        buffer = io.BytesIO()
+                        img.save(buffer, format="JPEG", quality=95)
                         avatar = Avatar(
-                            content=no_avatar_f.read(),
-                            mime='image/jpg'
+                            content=buffer.getvalue(),
+                            mime="image/jpeg"
                         )
-                session.add(avatar)
-                session.flush()
-                new_user = User(
-                    email=form.email.data,
-                    avatar=avatar,
-                    name=form.name.data,
-                    surname=form.surname.data,
-                    age=form.age.data,
-                    description=form.description.data,
-                    pref_sport=", ".join(form.pref_sport.data)
-                )
-                new_user.set_password(form.password.data)
-                session.add(new_user)
-                session.commit()
-                return redirect("/login")
+                    else:
+                        with open('main_app/static/images/no_avatar.jpg', 'rb') as no_avatar_f:
+                            avatar = Avatar(
+                                content=no_avatar_f.read(),
+                                mime='image/jpg'
+                            )
+                    session.add(avatar)
+                    session.flush()
+                    new_user = User(
+                        email=form.email.data,
+                        avatar=avatar,
+                        name=form.name.data,
+                        surname=form.surname.data,
+                        age=form.age.data,
+                        description=form.description.data,
+                        pref_sport=", ".join(form.pref_sport.data)
+                    )
+                    new_user.set_password(form.password.data)
+                    session.add(new_user)
+                    session.commit()
+                    return redirect("/login")
+                return render_template("register.html", form=form, message='Такой возраст невозможен')
             return render_template("register.html", form=form, message='Пароли не совпадают')
         return render_template("register.html", form=form, message='Адрес электронной почты занят')
     return render_template("register.html", form=form)
